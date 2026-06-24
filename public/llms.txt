@@ -1,0 +1,14 @@
+# Mallick Assist Service
+
+> Lithuania-based support and concierge service helping migrants, students, and diaspora communities with accommodation, hall rentals, currency exchange, buying and selling, and import/export.
+
+Mallick Assist Service provides one trusted local contact for arrivals, families, and businesses across Lithuania. We connect people with vetted housing, event venues, shipping partners, and trade support — and stay involved from first message through completion.
+
+## Pages
+
+- [Home](/): Overview of services, how it works, testimonials, and contact.
+- [Services](/services): All six support services in one place.
+- [Accommodation](/accommodation): Short-term and long-term housing across Lithuania.
+- [Hall Rentals](/hall-rentals): Venue booking and event planning support.
+- [Import & Export](/import-export): Shipping, customs, and logistics support.
+- [Contact](/contact): WhatsApp, phone, email, and service request form.

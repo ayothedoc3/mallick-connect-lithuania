@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://mallick-connect-lithuania.lovable.app/sitemap.xml

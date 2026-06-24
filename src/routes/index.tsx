@@ -8,10 +8,28 @@ import { SERVICES, SITE } from "@/lib/site";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mallick Assist Service — Accommodation, Events & Shipping in Lithuania" },
+      { title: "Mallick Assist Service — Support Services in Lithuania" },
       { name: "description", content: "Trusted support for accommodation, hall rentals, currency exchange, buying & selling, and import/export in Lithuania. One contact for everything you need." },
-      { property: "og:title", content: "Mallick Assist Service" },
+      { property: "og:title", content: "Mallick Assist Service — Trusted Support in Lithuania" },
       { property: "og:description", content: "One trusted contact for accommodation, hall rentals, exchange, trade and shipping in Lithuania." },
+      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/" },
+    ],
+    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "Mallick Assist Service",
+          description: "Support and concierge service helping migrants, students, and diaspora communities in Lithuania with accommodation, hall rentals, currency exchange, buying and selling, and import/export.",
+          telephone: "+37062434541",
+          email: "info@mallickassist.com",
+          url: "https://mallick-connect-lithuania.lovable.app/",
+          address: { "@type": "PostalAddress", addressCountry: "LT", addressLocality: "Vilnius" },
+          areaServed: "Lithuania",
+        }),
+      },
     ],
   }),
   component: Home,
@@ -166,7 +184,7 @@ function Home() {
         </div>
         <div className="rounded-3xl bg-primary p-8 sm:p-10 text-primary-foreground relative overflow-hidden">
           <div className="absolute -top-10 -right-10 size-44 rounded-full bg-accent/40 blur-2xl" />
-          <h3 className="font-display text-2xl font-extrabold">Need something fast?</h3>
+          <h2 className="font-display text-2xl font-extrabold">Need something fast?</h2>
           <p className="mt-2 text-primary-foreground/80">
             Send us a WhatsApp message and we'll respond within minutes during working hours.
           </p>
