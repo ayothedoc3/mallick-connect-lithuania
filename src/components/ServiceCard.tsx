@@ -40,5 +40,5 @@ export function ServiceCard({ title, description, icon, href, tone = "light" }: 
       )}
     </div>
   );
-  return href ? <Link to={href} className="block h-full">{inner}</Link> : inner;
+  return href ? <Link to={href} aria-label={`About ${title}`} className="block h-full">{inner}</Link> : inner;
 }
