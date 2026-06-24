@@ -9,9 +9,22 @@ export const Route = createFileRoute("/hall-rentals")({
     meta: [
       { title: "Hall Rentals in Lithuania — Mallick Assist Service" },
       { name: "description", content: "Event halls for weddings, birthdays, conferences and community gatherings across Lithuania. We help you book and organize." },
-      { property: "og:title", content: "Hall Rentals in Lithuania" },
+      { property: "og:title", content: "Hall Rentals in Lithuania — Mallick Assist Service" },
       { property: "og:description", content: "Book event halls for weddings, birthdays, conferences and cultural events with full support." },
+      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/hall-rentals" },
     ],
+    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/hall-rentals" }],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Hall Rentals in Lithuania",
+        description: "Booking and organization support for event halls — weddings, birthdays, conferences and cultural events across Lithuania.",
+        areaServed: "Lithuania",
+        provider: { "@type": "LocalBusiness", name: "Mallick Assist Service", telephone: "+37062434541" },
+      }),
+    }],
   }),
   component: HallRentalsPage,
 });
