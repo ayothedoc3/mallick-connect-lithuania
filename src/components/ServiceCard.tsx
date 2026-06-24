@@ -34,8 +34,8 @@ export function ServiceCard({ title, description, icon, href, tone = "light" }: 
       </p>
       {href && (
         <span className="mt-5 inline-flex items-center gap-1 text-sm font-bold">
-          Learn more
-          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          About {title}
+          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
         </span>
       )}
     </div>
