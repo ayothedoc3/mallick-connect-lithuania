@@ -10,9 +10,27 @@ export const Route = createFileRoute("/contact")({
     meta: [
       { title: "Contact — Mallick Assist Service" },
       { name: "description", content: "Get in touch with Mallick Assist Service via WhatsApp, phone, or email. Based in Lithuania, supporting the diaspora community." },
-      { property: "og:title", content: "Contact Mallick Assist Service" },
+      { property: "og:title", content: "Contact — Mallick Assist Service" },
       { property: "og:description", content: "Reach us on WhatsApp +370 624 34541 or fill out the service request form." },
+      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/contact" },
     ],
+    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/contact" }],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        name: "Contact Mallick Assist Service",
+        url: "https://mallick-connect-lithuania.lovable.app/contact",
+        mainEntity: {
+          "@type": "LocalBusiness",
+          name: "Mallick Assist Service",
+          telephone: "+37062434541",
+          email: "info@mallickassist.com",
+          areaServed: "Lithuania",
+        },
+      }),
+    }],
   }),
   component: ContactPage,
 });
