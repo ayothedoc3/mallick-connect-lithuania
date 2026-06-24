@@ -184,7 +184,7 @@ function Home() {
         </div>
         <div className="rounded-3xl bg-primary p-8 sm:p-10 text-primary-foreground relative overflow-hidden">
           <div className="absolute -top-10 -right-10 size-44 rounded-full bg-accent/40 blur-2xl" />
-          <h3 className="font-display text-2xl font-extrabold">Need something fast?</h3>
+          <h2 className="font-display text-2xl font-extrabold">Need something fast?</h2>
           <p className="mt-2 text-primary-foreground/80">
             Send us a WhatsApp message and we'll respond within minutes during working hours.
           </p>
