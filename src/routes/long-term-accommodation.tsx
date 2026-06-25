@@ -11,9 +11,9 @@ export const Route = createFileRoute("/long-term-accommodation")({
       { name: "description", content: "Reliable long-term housing for migrants, students and families settling in Lithuania. Contract guidance in your language, deposit and utility help, roommate matching." },
       { property: "og:title", content: "Long Term Accommodation in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "Find a real home and navigate the rental process with support you can trust." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/long-term-accommodation" },
+      { property: "og:url", content: "https://mallickassistservice.com/long-term-accommodation" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/long-term-accommodation" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/long-term-accommodation" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({

@@ -11,9 +11,9 @@ export const Route = createFileRoute("/currency-exchange")({
       { name: "description", content: "Guidance and trusted contacts for exchanging and sending money safely in Lithuania. We help you find fair rates and avoid scams." },
       { property: "og:title", content: "Currency Exchange Assistance in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "Safe, transparent help with currency exchange and money transfers for the diaspora community." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/currency-exchange" },
+      { property: "og:url", content: "https://mallickassistservice.com/currency-exchange" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/currency-exchange" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/currency-exchange" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({

@@ -11,9 +11,9 @@ export const Route = createFileRoute("/accommodation")({
       { name: "description", content: "Trusted short-term and long-term accommodation across Lithuania for students, migrants, and visitors. Fast, safe, community-backed." },
       { property: "og:title", content: "Accommodation in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "Short-term and long-term housing support for migrants, students and visitors in Lithuania." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/accommodation" },
+      { property: "og:url", content: "https://mallickassistservice.com/accommodation" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/accommodation" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/accommodation" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({

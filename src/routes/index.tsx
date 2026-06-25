@@ -12,9 +12,9 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Trusted support for accommodation, hall rentals, currency exchange, buying & selling, and import/export in Lithuania. One contact for everything you need." },
       { property: "og:title", content: "Mallick Assist Service | Trusted Support in Lithuania" },
       { property: "og:description", content: "One trusted contact for accommodation, hall rentals, exchange, trade and shipping in Lithuania." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/" },
+      { property: "og:url", content: "https://mallickassistservice.com/" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
           name: "Mallick Assist Service",
           description: "Support and concierge service helping migrants, students, and diaspora communities in Lithuania with accommodation, hall rentals, currency exchange, buying and selling, and import/export.",
           telephone: "+37062434541",
-          url: "https://mallick-connect-lithuania.lovable.app/",
+          url: "https://mallickassistservice.com/",
           address: { "@type": "PostalAddress", addressCountry: "LT", addressLocality: "Vilnius" },
           areaServed: "Lithuania",
         }),

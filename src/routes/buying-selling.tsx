@@ -11,9 +11,9 @@ export const Route = createFileRoute("/buying-selling")({
       { name: "description", content: "Find what you need and sell what you do not. We connect trusted buyers and sellers across the diaspora community in Lithuania." },
       { property: "og:title", content: "Buying & Selling Items in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "Source furniture, electronics and essentials, or sell your items to trusted buyers." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/buying-selling" },
+      { property: "og:url", content: "https://mallickassistservice.com/buying-selling" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/buying-selling" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/buying-selling" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({

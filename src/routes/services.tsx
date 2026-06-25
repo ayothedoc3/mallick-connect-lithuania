@@ -12,9 +12,9 @@ export const Route = createFileRoute("/services")({
       { name: "description", content: "Accommodation, hall rentals, currency exchange, buying & selling, and import/export, all the support you need in Lithuania." },
       { property: "og:title", content: "Our Services | Mallick Assist Service" },
       { property: "og:description", content: "Six trusted support services for migrants, students and diaspora in Lithuania." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/services" },
+      { property: "og:url", content: "https://mallickassistservice.com/services" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/services" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/services" }],
   }),
   component: ServicesPage,
 });

@@ -11,9 +11,9 @@ export const Route = createFileRoute("/short-term-accommodation")({
       { name: "description", content: "Furnished short-term stays in Lithuania for visitors, students arriving, and people in transition. Flexible check-in, vetted hosts, fast WhatsApp booking." },
       { property: "og:title", content: "Short Term Accommodation in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "Comfortable short stays from one night to a few weeks, across Vilnius, Kaunas, Klaipeda and more." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/short-term-accommodation" },
+      { property: "og:url", content: "https://mallickassistservice.com/short-term-accommodation" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/short-term-accommodation" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/short-term-accommodation" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({

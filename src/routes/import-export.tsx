@@ -11,9 +11,9 @@ export const Route = createFileRoute("/import-export")({
       { name: "description", content: "Shipping, customs and logistics support for goods in and out of Lithuania. Trusted by the diaspora community." },
       { property: "og:title", content: "Import & Export Support in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "We help you ship goods safely between Lithuania and your home country." },
-      { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/import-export" },
+      { property: "og:url", content: "https://mallickassistservice.com/import-export" },
     ],
-    links: [{ rel: "canonical", href: "https://mallick-connect-lithuania.lovable.app/import-export" }],
+    links: [{ rel: "canonical", href: "https://mallickassistservice.com/import-export" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({
