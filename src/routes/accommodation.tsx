@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Check, Bed, Home } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Check, Bed, Home, ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -7,9 +7,9 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 export const Route = createFileRoute("/accommodation")({
   head: () => ({
     meta: [
-      { title: "Accommodation in Lithuania — Mallick Assist Service" },
+      { title: "Accommodation in Lithuania | Mallick Assist Service" },
       { name: "description", content: "Trusted short-term and long-term accommodation across Lithuania for students, migrants, and visitors. Fast, safe, community-backed." },
-      { property: "og:title", content: "Accommodation in Lithuania — Mallick Assist Service" },
+      { property: "og:title", content: "Accommodation in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "Short-term and long-term housing support for migrants, students and visitors in Lithuania." },
       { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/accommodation" },
     ],
@@ -45,6 +45,7 @@ function AccommodationPage() {
           {
             icon: Bed,
             title: "Short Term Accommodation",
+            href: "/short-term-accommodation",
             desc: "Comfortable stays from one night to a few weeks. Perfect for visitors, business trips, students arriving, or transition periods.",
             bullets: ["Furnished apartments & rooms", "Flexible check-in", "Vetted hosts", "Vilnius, Kaunas, Klaipėda & more"],
             tone: "bg-primary text-primary-foreground",
@@ -52,6 +53,7 @@ function AccommodationPage() {
           {
             icon: Home,
             title: "Long Term Accommodation",
+            href: "/long-term-accommodation",
             desc: "Reliable housing for migrants, students and families. We help you find a home and navigate contracts in your language.",
             bullets: ["6 to 12+ month rentals", "Contract guidance", "Roommate matching", "Help with deposits & utilities"],
             tone: "bg-accent text-accent-foreground",
@@ -68,6 +70,10 @@ function AccommodationPage() {
                 <li key={x} className="flex items-start gap-2"><Check className="size-4 mt-0.5 shrink-0" />{x}</li>
               ))}
             </ul>
+            <Link to={b.href} className="mt-6 inline-flex items-center gap-1 text-sm font-bold underline-offset-4 hover:underline">
+              View {b.title} details
+              <ArrowUpRight className="size-4" />
+            </Link>
           </div>
         ))}
       </section>

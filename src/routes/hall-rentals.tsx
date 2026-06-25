@@ -7,9 +7,9 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 export const Route = createFileRoute("/hall-rentals")({
   head: () => ({
     meta: [
-      { title: "Hall Rentals in Lithuania — Mallick Assist Service" },
+      { title: "Hall Rentals in Lithuania | Mallick Assist Service" },
       { name: "description", content: "Event halls for weddings, birthdays, conferences and community gatherings across Lithuania. We help you book and organize." },
-      { property: "og:title", content: "Hall Rentals in Lithuania — Mallick Assist Service" },
+      { property: "og:title", content: "Hall Rentals in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "Book event halls for weddings, birthdays, conferences and cultural events with full support." },
       { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/hall-rentals" },
     ],
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/hall-rentals")({
         "@context": "https://schema.org",
         "@type": "Service",
         name: "Hall Rentals in Lithuania",
-        description: "Booking and organization support for event halls — weddings, birthdays, conferences and cultural events across Lithuania.",
+        description: "Booking and organization support for event halls: weddings, birthdays, conferences and cultural events across Lithuania.",
         areaServed: "Lithuania",
         provider: { "@type": "LocalBusiness", name: "Mallick Assist Service", telephone: "+37062434541" },
       }),
@@ -35,7 +35,7 @@ function HallRentalsPage() {
       <PageHero
         eyebrow="Hall Rentals"
         title={<>Event halls for every <span className="text-accent">celebration</span></>}
-        subtitle="From intimate gatherings to grand weddings, we help you find and book the right venue — and stay with you through the planning."
+        subtitle="From intimate gatherings to grand weddings, we help you find and book the right venue, and stay with you through the planning."
       >
         <WhatsAppButton size="lg" label="Ask about a hall" />
       </PageHero>
@@ -60,7 +60,7 @@ function HallRentalsPage() {
         <div className="mt-12 rounded-3xl bg-primary text-primary-foreground p-8 sm:p-10 grid lg:grid-cols-2 gap-8">
           <div>
             <h2 className="font-display text-2xl sm:text-3xl font-extrabold">What's included</h2>
-            <p className="mt-2 text-primary-foreground/80">We don't just hand you keys — we help organize the day.</p>
+            <p className="mt-2 text-primary-foreground/80">We don't just hand you keys. We help organize the day.</p>
           </div>
           <ul className="grid sm:grid-cols-2 gap-3 text-sm">
             {[

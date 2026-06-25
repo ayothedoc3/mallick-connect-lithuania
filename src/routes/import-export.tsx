@@ -7,9 +7,9 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 export const Route = createFileRoute("/import-export")({
   head: () => ({
     meta: [
-      { title: "Import & Export Support — Mallick Assist Service" },
+      { title: "Import & Export Support | Mallick Assist Service" },
       { name: "description", content: "Shipping, customs and logistics support for goods in and out of Lithuania. Trusted by the diaspora community." },
-      { property: "og:title", content: "Import & Export Support in Lithuania — Mallick Assist Service" },
+      { property: "og:title", content: "Import & Export Support in Lithuania | Mallick Assist Service" },
       { property: "og:description", content: "We help you ship goods safely between Lithuania and your home country." },
       { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/import-export" },
     ],
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/import-export")({
         "@context": "https://schema.org",
         "@type": "Service",
         name: "Import & Export Support",
-        description: "Logistics, customs and shipping support for goods moving in and out of Lithuania — sea, air, road freight and customs clearance.",
+        description: "Logistics, customs and shipping support for goods moving in and out of Lithuania: sea, air, road freight and customs clearance.",
         areaServed: "Lithuania",
         provider: { "@type": "LocalBusiness", name: "Mallick Assist Service", telephone: "+37062434541" },
       }),
@@ -35,7 +35,7 @@ function ImportExportPage() {
       <PageHero
         eyebrow="Import & Export"
         title={<>Ship with <span className="text-accent">confidence</span> in & out of Lithuania</>}
-        subtitle="From a single parcel to a full container — we help with logistics, paperwork and trusted shipping partners."
+        subtitle="From a single parcel to a full container, we help with logistics, paperwork and trusted shipping partners."
       >
         <WhatsAppButton size="lg" label="Ask about shipping" />
       </PageHero>
@@ -79,7 +79,7 @@ function ImportExportPage() {
             <ul className="mt-4 space-y-2 text-sm">
               {[
                 "Vetted shipping partners across continents",
-                "Clear pricing — no hidden surprises",
+                "Clear pricing, no hidden surprises",
                 "Updates at every step of the journey",
                 "Diaspora-focused, we know what matters",
               ].map((x) => (

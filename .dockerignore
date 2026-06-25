@@ -1,0 +1,9 @@
+node_modules
+.output
+dist
+.git
+.github
+*.log
+.DS_Store
+.vscode
+.idea

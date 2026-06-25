@@ -1,16 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Phone, Mail, MapPin, Instagram, MessageCircle } from "lucide-react";
+import { Phone, MapPin, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { TikTokIcon } from "@/components/icons";
 import { SITE } from "@/lib/site";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Mallick Assist Service" },
-      { name: "description", content: "Get in touch with Mallick Assist Service via WhatsApp, phone, or email. Based in Lithuania, supporting the diaspora community." },
-      { property: "og:title", content: "Contact — Mallick Assist Service" },
+      { title: "Contact | Mallick Assist Service" },
+      { name: "description", content: "Get in touch with Mallick Assist Service on WhatsApp or by phone. Based in Lithuania, supporting the diaspora community." },
+      { property: "og:title", content: "Contact | Mallick Assist Service" },
       { property: "og:description", content: "Reach us on WhatsApp +370 624 34541 or fill out the service request form." },
       { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/contact" },
     ],
@@ -26,7 +27,6 @@ export const Route = createFileRoute("/contact")({
           "@type": "LocalBusiness",
           name: "Mallick Assist Service",
           telephone: "+37062434541",
-          email: "info@mallickassist.com",
           areaServed: "Lithuania",
         },
       }),
@@ -41,7 +41,7 @@ function ContactPage() {
       <PageHero
         eyebrow="Contact us"
         title={<>One trusted contact for <span className="text-accent">everything you need</span></>}
-        subtitle="WhatsApp is fastest — most messages answered within minutes during working hours."
+        subtitle="WhatsApp is fastest. Most messages answered within minutes during working hours."
       >
         <div className="flex flex-wrap gap-3">
           <WhatsAppButton size="lg" />
@@ -59,9 +59,8 @@ function ContactPage() {
           {[
             { icon: MessageCircle, label: "WhatsApp", value: SITE.phoneDisplay, href: `https://wa.me/37062434541` },
             { icon: Phone, label: "Phone", value: SITE.phoneDisplay, href: `tel:${SITE.phone}` },
-            { icon: Mail, label: "Email", value: SITE.email, href: `mailto:${SITE.email}` },
             { icon: MapPin, label: "Based in", value: SITE.city },
-            { icon: Instagram, label: "Instagram", value: "@mallickassistservice", href: SITE.instagram },
+            { icon: TikTokIcon, label: "TikTok", value: SITE.tiktokHandle, href: SITE.tiktok },
           ].map((c) => {
             const inner = (
               <div className="rounded-2xl border border-border bg-card p-5 flex items-center gap-4 hover:border-primary-bright transition">

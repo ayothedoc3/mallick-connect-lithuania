@@ -3,10 +3,9 @@ export const SITE = {
   phone: "+37062434541",
   phoneDisplay: "+370 624 34541",
   whatsappBase: "https://wa.me/37062434541",
-  email: "hello@mallickassist.lt",
   city: "Vilnius, Lithuania",
-  instagram: "https://instagram.com/mallickassistservice",
-  tiktok: "https://tiktok.com/@mallickassistservice",
+  tiktok: "https://www.tiktok.com/@mallickinternational20",
+  tiktokHandle: "@mallickinternational20",
 };
 
 export function waLink(message: string) {

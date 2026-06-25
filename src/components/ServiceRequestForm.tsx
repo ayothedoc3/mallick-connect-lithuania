@@ -26,7 +26,7 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const msg = [
-      `*New Service Request — Mallick Assist*`,
+      `*New Service Request: Mallick Assist*`,
       ``,
       `*Name:* ${form.name}`,
       `*WhatsApp:* ${form.whatsapp}`,

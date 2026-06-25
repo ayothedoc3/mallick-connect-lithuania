@@ -8,9 +8,9 @@ import { SERVICES, SITE } from "@/lib/site";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mallick Assist Service — Support Services in Lithuania" },
+      { title: "Mallick Assist Service | Support Services in Lithuania" },
       { name: "description", content: "Trusted support for accommodation, hall rentals, currency exchange, buying & selling, and import/export in Lithuania. One contact for everything you need." },
-      { property: "og:title", content: "Mallick Assist Service — Trusted Support in Lithuania" },
+      { property: "og:title", content: "Mallick Assist Service | Trusted Support in Lithuania" },
       { property: "og:description", content: "One trusted contact for accommodation, hall rentals, exchange, trade and shipping in Lithuania." },
       { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/" },
     ],
@@ -24,7 +24,6 @@ export const Route = createFileRoute("/")({
           name: "Mallick Assist Service",
           description: "Support and concierge service helping migrants, students, and diaspora communities in Lithuania with accommodation, hall rentals, currency exchange, buying and selling, and import/export.",
           telephone: "+37062434541",
-          email: "info@mallickassist.com",
           url: "https://mallick-connect-lithuania.lovable.app/",
           address: { "@type": "PostalAddress", addressCountry: "LT", addressLocality: "Vilnius" },
           areaServed: "Lithuania",
@@ -54,7 +53,7 @@ function Home() {
               and shipping in Lithuania
             </h1>
             <p className="mt-6 max-w-xl text-base sm:text-lg text-primary-foreground/85">
-              Mallick Assist Service helps people settle, move, trade and organize events —
+              Mallick Assist Service helps people settle, move, trade and organize events,
               all through one trusted contact.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -106,7 +105,7 @@ function Home() {
             </h2>
           </div>
           <p className="max-w-md text-muted-foreground">
-            From your first night in Lithuania to shipping goods home — we handle the details so you don't have to.
+            From your first night in Lithuania to shipping goods home. We handle the details so you don't have to.
           </p>
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -117,12 +116,7 @@ function Home() {
               description={s.short}
               icon={s.icon}
               tone={TONES[i]}
-              href={
-                s.slug.includes("accommodation") ? "/accommodation"
-                : s.slug === "hall-rentals" ? "/hall-rentals"
-                : s.slug === "import-export" ? "/import-export"
-                : "/services"
-              }
+              href={`/${s.slug}`}
             />
           ))}
         </div>
@@ -250,8 +244,8 @@ function Home() {
           </p>
           <div className="mt-8 space-y-4">
             <ContactRow label="WhatsApp & Calls" value={SITE.phoneDisplay} href={`tel:${SITE.phone}`} />
-            <ContactRow label="Email" value={SITE.email} href={`mailto:${SITE.email}`} />
             <ContactRow label="Based in" value={SITE.city} />
+            <ContactRow label="TikTok" value={SITE.tiktokHandle} href={SITE.tiktok} />
           </div>
           <div className="mt-8">
             <WhatsAppButton size="lg" />

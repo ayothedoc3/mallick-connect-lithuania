@@ -8,9 +8,9 @@ import { SERVICES } from "@/lib/site";
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Our Services — Mallick Assist Service" },
-      { name: "description", content: "Accommodation, hall rentals, currency exchange, buying & selling, and import/export — all the support you need in Lithuania." },
-      { property: "og:title", content: "Our Services — Mallick Assist Service" },
+      { title: "Our Services | Mallick Assist Service" },
+      { name: "description", content: "Accommodation, hall rentals, currency exchange, buying & selling, and import/export, all the support you need in Lithuania." },
+      { property: "og:title", content: "Our Services | Mallick Assist Service" },
       { property: "og:description", content: "Six trusted support services for migrants, students and diaspora in Lithuania." },
       { property: "og:url", content: "https://mallick-connect-lithuania.lovable.app/services" },
     ],
@@ -35,7 +35,7 @@ function ServicesPage() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-16">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
-            <ServiceCard key={s.slug} title={s.title} description={s.short} icon={s.icon} tone={TONES[i]} />
+            <ServiceCard key={s.slug} title={s.title} description={s.short} icon={s.icon} tone={TONES[i]} href={`/${s.slug}`} />
           ))}
         </div>
       </section>

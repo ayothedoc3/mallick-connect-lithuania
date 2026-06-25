@@ -10,10 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ShortTermAccommodationRouteImport } from './routes/short-term-accommodation'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as LongTermAccommodationRouteImport } from './routes/long-term-accommodation'
 import { Route as ImportExportRouteImport } from './routes/import-export'
 import { Route as HallRentalsRouteImport } from './routes/hall-rentals'
+import { Route as CurrencyExchangeRouteImport } from './routes/currency-exchange'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BuyingSellingRouteImport } from './routes/buying-selling'
 import { Route as AccommodationRouteImport } from './routes/accommodation'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,9 +26,19 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShortTermAccommodationRoute = ShortTermAccommodationRouteImport.update({
+  id: '/short-term-accommodation',
+  path: '/short-term-accommodation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LongTermAccommodationRoute = LongTermAccommodationRouteImport.update({
+  id: '/long-term-accommodation',
+  path: '/long-term-accommodation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportExportRoute = ImportExportRouteImport.update({
@@ -37,9 +51,19 @@ const HallRentalsRoute = HallRentalsRouteImport.update({
   path: '/hall-rentals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CurrencyExchangeRoute = CurrencyExchangeRouteImport.update({
+  id: '/currency-exchange',
+  path: '/currency-exchange',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuyingSellingRoute = BuyingSellingRouteImport.update({
+  id: '/buying-selling',
+  path: '/buying-selling',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccommodationRoute = AccommodationRouteImport.update({
@@ -56,29 +80,41 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accommodation': typeof AccommodationRoute
+  '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
+  '/currency-exchange': typeof CurrencyExchangeRoute
   '/hall-rentals': typeof HallRentalsRoute
   '/import-export': typeof ImportExportRoute
+  '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/services': typeof ServicesRoute
+  '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accommodation': typeof AccommodationRoute
+  '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
+  '/currency-exchange': typeof CurrencyExchangeRoute
   '/hall-rentals': typeof HallRentalsRoute
   '/import-export': typeof ImportExportRoute
+  '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/services': typeof ServicesRoute
+  '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accommodation': typeof AccommodationRoute
+  '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
+  '/currency-exchange': typeof CurrencyExchangeRoute
   '/hall-rentals': typeof HallRentalsRoute
   '/import-export': typeof ImportExportRoute
+  '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/services': typeof ServicesRoute
+  '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
@@ -86,38 +122,54 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/accommodation'
+    | '/buying-selling'
     | '/contact'
+    | '/currency-exchange'
     | '/hall-rentals'
     | '/import-export'
+    | '/long-term-accommodation'
     | '/services'
+    | '/short-term-accommodation'
     | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accommodation'
+    | '/buying-selling'
     | '/contact'
+    | '/currency-exchange'
     | '/hall-rentals'
     | '/import-export'
+    | '/long-term-accommodation'
     | '/services'
+    | '/short-term-accommodation'
     | '/sitemap.xml'
   id:
     | '__root__'
     | '/'
     | '/accommodation'
+    | '/buying-selling'
     | '/contact'
+    | '/currency-exchange'
     | '/hall-rentals'
     | '/import-export'
+    | '/long-term-accommodation'
     | '/services'
+    | '/short-term-accommodation'
     | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccommodationRoute: typeof AccommodationRoute
+  BuyingSellingRoute: typeof BuyingSellingRoute
   ContactRoute: typeof ContactRoute
+  CurrencyExchangeRoute: typeof CurrencyExchangeRoute
   HallRentalsRoute: typeof HallRentalsRoute
   ImportExportRoute: typeof ImportExportRoute
+  LongTermAccommodationRoute: typeof LongTermAccommodationRoute
   ServicesRoute: typeof ServicesRoute
+  ShortTermAccommodationRoute: typeof ShortTermAccommodationRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -130,11 +182,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/short-term-accommodation': {
+      id: '/short-term-accommodation'
+      path: '/short-term-accommodation'
+      fullPath: '/short-term-accommodation'
+      preLoaderRoute: typeof ShortTermAccommodationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/long-term-accommodation': {
+      id: '/long-term-accommodation'
+      path: '/long-term-accommodation'
+      fullPath: '/long-term-accommodation'
+      preLoaderRoute: typeof LongTermAccommodationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import-export': {
@@ -151,11 +217,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HallRentalsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/currency-exchange': {
+      id: '/currency-exchange'
+      path: '/currency-exchange'
+      fullPath: '/currency-exchange'
+      preLoaderRoute: typeof CurrencyExchangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buying-selling': {
+      id: '/buying-selling'
+      path: '/buying-selling'
+      fullPath: '/buying-selling'
+      preLoaderRoute: typeof BuyingSellingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accommodation': {
@@ -178,12 +258,26 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccommodationRoute: AccommodationRoute,
+  BuyingSellingRoute: BuyingSellingRoute,
   ContactRoute: ContactRoute,
+  CurrencyExchangeRoute: CurrencyExchangeRoute,
   HallRentalsRoute: HallRentalsRoute,
   ImportExportRoute: ImportExportRoute,
+  LongTermAccommodationRoute: LongTermAccommodationRoute,
   ServicesRoute: ServicesRoute,
+  ShortTermAccommodationRoute: ShortTermAccommodationRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

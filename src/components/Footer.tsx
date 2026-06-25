@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Phone, Mail, MapPin, Instagram, Compass } from "lucide-react";
+import { Phone, MapPin, Compass } from "lucide-react";
 import { SITE } from "@/lib/site";
+import { TikTokIcon } from "@/components/icons";
 
 export function Footer() {
   return (
@@ -22,8 +23,11 @@ export function Footer() {
         <div>
           <h4 className="text-sm font-bold uppercase tracking-wider text-accent">Services</h4>
           <ul className="mt-4 space-y-2 text-sm text-primary-foreground/80">
-            <li><Link to="/accommodation" className="hover:text-accent">Accommodation</Link></li>
+            <li><Link to="/short-term-accommodation" className="hover:text-accent">Short Term Accommodation</Link></li>
+            <li><Link to="/long-term-accommodation" className="hover:text-accent">Long Term Accommodation</Link></li>
+            <li><Link to="/currency-exchange" className="hover:text-accent">Currency Exchange</Link></li>
             <li><Link to="/hall-rentals" className="hover:text-accent">Hall Rentals</Link></li>
+            <li><Link to="/buying-selling" className="hover:text-accent">Buying & Selling</Link></li>
             <li><Link to="/import-export" className="hover:text-accent">Import & Export</Link></li>
             <li><Link to="/services" className="hover:text-accent">All Services</Link></li>
           </ul>
@@ -37,16 +41,12 @@ export function Footer() {
               <a href={`tel:${SITE.phone}`} className="hover:text-accent">{SITE.phoneDisplay}</a>
             </li>
             <li className="flex items-start gap-2">
-              <Mail className="size-4 mt-0.5 shrink-0 text-accent" />
-              <a href={`mailto:${SITE.email}`} className="hover:text-accent break-all">{SITE.email}</a>
-            </li>
-            <li className="flex items-start gap-2">
               <MapPin className="size-4 mt-0.5 shrink-0 text-accent" />
               <span>{SITE.city}</span>
             </li>
             <li className="flex items-start gap-2">
-              <Instagram className="size-4 mt-0.5 shrink-0 text-accent" />
-              <a href={SITE.instagram} target="_blank" rel="noreferrer" className="hover:text-accent">@mallickassistservice</a>
+              <TikTokIcon className="size-4 mt-0.5 shrink-0 text-accent" />
+              <a href={SITE.tiktok} target="_blank" rel="noreferrer" className="hover:text-accent">{SITE.tiktokHandle}</a>
             </li>
           </ul>
         </div>
