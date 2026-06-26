@@ -41,29 +41,30 @@
 
 :root {
   --radius: 1rem;
-  --background: oklch(0.99 0.005 250);
-  --foreground: oklch(0.2 0.05 260);
+  /* Warm near-white so the gold reads as luxe, not garish */
+  --background: oklch(0.99 0.006 90);
+  --foreground: oklch(0.18 0.008 80);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.05 260);
+  --card-foreground: oklch(0.18 0.008 80);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.05 260);
+  --popover-foreground: oklch(0.18 0.008 80);
 
-  /* Deep navy from flyer */
-  --primary: oklch(0.28 0.1 260);
-  --primary-foreground: oklch(0.99 0.005 250);
-  /* Bright blue */
-  --primary-bright: oklch(0.55 0.18 252);
+  /* Logo black */
+  --primary: oklch(0.17 0.006 80);
+  --primary-foreground: oklch(0.98 0.008 90);
+  /* Antique gold, readable on light backgrounds (labels, links, hovers) */
+  --primary-bright: oklch(0.56 0.10 76);
 
-  --secondary: oklch(0.95 0.02 250);
-  --secondary-foreground: oklch(0.28 0.1 260);
+  --secondary: oklch(0.96 0.008 88);
+  --secondary-foreground: oklch(0.2 0.01 80);
 
-  --muted: oklch(0.96 0.01 250);
-  --muted-foreground: oklch(0.5 0.03 258);
+  --muted: oklch(0.96 0.006 88);
+  --muted-foreground: oklch(0.48 0.02 80);
 
-  /* Yellow accent */
-  --accent: oklch(0.87 0.16 92);
-  --accent-foreground: oklch(0.25 0.08 260);
+  /* Logo gold (metallic) for accents, badges and CTAs on black */
+  --accent: oklch(0.80 0.13 85);
+  --accent-foreground: oklch(0.17 0.01 80);
 
   --whatsapp: oklch(0.68 0.17 145);
   --whatsapp-foreground: oklch(1 0 0);
@@ -71,9 +72,9 @@
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.9 0.015 250);
-  --input: oklch(0.92 0.015 250);
-  --ring: oklch(0.55 0.18 252);
+  --border: oklch(0.9 0.008 85);
+  --input: oklch(0.92 0.008 85);
+  --ring: oklch(0.80 0.13 85);
 }
 
 @layer base {
