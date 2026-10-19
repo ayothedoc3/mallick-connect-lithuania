@@ -1,6 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { Send } from "lucide-react";
-import { SERVICES, waLink } from "@/lib/site";
+import { toast } from "sonner";
+import { SERVICES } from "@/lib/site";
+import { useSiteSettings, useWaLink } from "@/lib/settings";
+import { submitServiceRequest } from "@/lib/requests";
 
 interface Props {
   defaultService?: string;
@@ -8,6 +11,8 @@ interface Props {
 }
 
 export function ServiceRequestForm({ defaultService = "", title = "Request a Service" }: Props) {
+  const site = useSiteSettings();
+  const waLink = useWaLink();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -39,8 +44,13 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
       `*Message:*`,
       form.message,
     ].join("\n");
+    // Open WhatsApp first: browsers only allow pop-ups directly inside the click.
     window.open(waLink(msg), "_blank", "noopener,noreferrer");
     setSubmitted(true);
+    submitServiceRequest(form).catch((err) => {
+      console.error(err);
+      toast.error("Your request could not be saved. Please also message us on WhatsApp.");
+    });
   }
 
   const inputCls =
@@ -57,7 +67,7 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
         <div className="mt-6 rounded-2xl bg-secondary p-5 text-sm">
           <p className="font-semibold text-primary">Thanks! Opening WhatsApp…</p>
           <p className="mt-1 text-muted-foreground">
-            If your chat didn't open, message us directly at <strong>+370 624 34541</strong>.
+            If your chat didn't open, message us directly at <strong>{site.phone_display}</strong>.
           </p>
         </div>
       ) : (

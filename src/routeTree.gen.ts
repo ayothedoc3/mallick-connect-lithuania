@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShortTermAccommodationRouteImport } from './routes/short-term-accommodation'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SellRouteImport } from './routes/sell'
+import { Route as PreciousRouteImport } from './routes/precious'
 import { Route as MyListingsRouteImport } from './routes/my-listings'
 import { Route as LongTermAccommodationRouteImport } from './routes/long-term-accommodation'
 import { Route as ImportExportRouteImport } from './routes/import-export'
@@ -44,6 +45,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const SellRoute = SellRouteImport.update({
   id: '/sell',
   path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreciousRoute = PreciousRouteImport.update({
+  id: '/precious',
+  path: '/precious',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyListingsRoute = MyListingsRouteImport.update({
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/my-listings': typeof MyListingsRoute
+  '/precious': typeof PreciousRoute
   '/sell': typeof SellRoute
   '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/my-listings': typeof MyListingsRoute
+  '/precious': typeof PreciousRoute
   '/sell': typeof SellRoute
   '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/my-listings': typeof MyListingsRoute
+  '/precious': typeof PreciousRoute
   '/sell': typeof SellRoute
   '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/import-export'
     | '/long-term-accommodation'
     | '/my-listings'
+    | '/precious'
     | '/sell'
     | '/services'
     | '/short-term-accommodation'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/import-export'
     | '/long-term-accommodation'
     | '/my-listings'
+    | '/precious'
     | '/sell'
     | '/services'
     | '/short-term-accommodation'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/import-export'
     | '/long-term-accommodation'
     | '/my-listings'
+    | '/precious'
     | '/sell'
     | '/services'
     | '/short-term-accommodation'
@@ -230,6 +242,7 @@ export interface RootRouteChildren {
   ImportExportRoute: typeof ImportExportRoute
   LongTermAccommodationRoute: typeof LongTermAccommodationRoute
   MyListingsRoute: typeof MyListingsRoute
+  PreciousRoute: typeof PreciousRoute
   SellRoute: typeof SellRoute
   ServicesRoute: typeof ServicesRoute
   ShortTermAccommodationRoute: typeof ShortTermAccommodationRoute
@@ -266,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/sell'
       fullPath: '/sell'
       preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precious': {
+      id: '/precious'
+      path: '/precious'
+      fullPath: '/precious'
+      preLoaderRoute: typeof PreciousRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my-listings': {
@@ -366,6 +386,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImportExportRoute: ImportExportRoute,
   LongTermAccommodationRoute: LongTermAccommodationRoute,
   MyListingsRoute: MyListingsRoute,
+  PreciousRoute: PreciousRoute,
   SellRoute: SellRoute,
   ServicesRoute: ServicesRoute,
   ShortTermAccommodationRoute: ShortTermAccommodationRoute,

@@ -4,7 +4,7 @@ import { PageHero } from "@/components/PageHero";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { TikTokIcon } from "@/components/icons";
-import { SITE } from "@/lib/site";
+import { useSiteSettings, useWaLink } from "@/lib/settings";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -36,6 +36,8 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const site = useSiteSettings();
+  const waLink = useWaLink();
   return (
     <>
       <PageHero
@@ -46,10 +48,10 @@ function ContactPage() {
         <div className="flex flex-wrap gap-3">
           <WhatsAppButton size="lg" />
           <a
-            href={`tel:${SITE.phone}`}
+            href={`tel:${site.phone}`}
             className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/30 px-6 py-3.5 text-sm font-bold text-primary-foreground hover:bg-white/10"
           >
-            <Phone className="size-4" /> Call {SITE.phoneDisplay}
+            <Phone className="size-4" /> Call {site.phone_display}
           </a>
         </div>
       </PageHero>
@@ -57,10 +59,10 @@ function ContactPage() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-start">
         <div className="grid gap-4">
           {[
-            { icon: MessageCircle, label: "WhatsApp", value: SITE.phoneDisplay, href: `https://wa.me/37062434541` },
-            { icon: Phone, label: "Phone", value: SITE.phoneDisplay, href: `tel:${SITE.phone}` },
-            { icon: MapPin, label: "Based in", value: SITE.city },
-            { icon: TikTokIcon, label: "TikTok", value: SITE.tiktokHandle, href: SITE.tiktok },
+            { icon: MessageCircle, label: "WhatsApp", value: site.phone_display, href: waLink("Hello Mallick Assist Service!") },
+            { icon: Phone, label: "Phone", value: site.phone_display, href: `tel:${site.phone}` },
+            { icon: MapPin, label: "Based in", value: site.city },
+            { icon: TikTokIcon, label: "TikTok", value: site.tiktok_handle, href: site.tiktok_url },
           ].map((c) => {
             const inner = (
               <div className="rounded-2xl border border-border bg-card p-5 flex items-center gap-4 hover:border-primary-bright transition">

@@ -32,10 +32,19 @@ Add them as environment variables where the site is built:
 
 Never use the `service_role` key in the site.
 
-## 4. Approving listings
-New listings start as **pending** and are invisible to the public. To publish one:
-Supabase → **Table Editor → listings** → change its `status` from `pending` to `published`
-(use `rejected` to decline). Sellers can mark their own listings as sold or delete them.
+## 4. Admin panel (/precious)
+Run `supabase/admin.sql` after `schema.sql`. It adds admins, site settings (contact details and
+announcement banner) and the service-requests inbox. The site needs the `site_settings` row to load.
+
+To make someone an admin, they sign up on the site first, then run in the SQL editor:
+
+```sql
+insert into public.admins (user_id) select id from auth.users where email = 'their@email.com';
+```
+
+They then sign in at `/precious` to approve, reject, mark sold or delete listings, see users,
+read service requests, and edit contact details and the banner. New listings start as
+**pending** and are invisible to the public until approved.
 
 ## Notes
 - Buyers tap **Ask about this item**, which opens WhatsApp to the Mallick number with the item
@@ -45,4 +54,4 @@ Supabase → **Table Editor → listings** → change its `status` from `pending
 - `src/routeTree.gen.ts` regenerates itself on the next build/dev run to include the new pages.
 
 ## Not included yet
-Password reset, editing an existing listing, and an in-site admin page for approvals.
+Password reset, editing an existing listing, and deleting user accounts from the admin panel.

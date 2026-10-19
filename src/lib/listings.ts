@@ -214,16 +214,6 @@ export interface SellerProfile {
   whatsapp: string;
 }
 
-export async function fetchListingsByStatus(status: ListingStatus): Promise<Listing[]> {
-  const { data, error } = await supabase
-    .from("listings")
-    .select("*, listing_media(*)")
-    .eq("status", status)
-    .order("created_at", { ascending: true });
-  if (error) throw error;
-  return (data ?? []) as Listing[];
-}
-
 export async function fetchProfiles(ids: string[]): Promise<Record<string, SellerProfile>> {
   if (ids.length === 0) return {};
   const { data, error } = await supabase
@@ -239,12 +229,35 @@ export async function setListingStatus(id: string, status: ListingStatus) {
   if (error) throw error;
 }
 
-export async function isAdminUser(userId: string): Promise<boolean> {
+export async function isAdminUser(): Promise<boolean> {
+  const { data, error } = await supabase.rpc("is_admin");
+  if (error) throw error;
+  return data as boolean;
+}
+
+export async function fetchAllListings(): Promise<Listing[]> {
   const { data, error } = await supabase
-    .from("admins")
-    .select("user_id")
-    .eq("user_id", userId)
-    .maybeSingle();
-  if (error) return false;
-  return Boolean(data);
+    .from("listings")
+    .select("*, listing_media(*)")
+    .order("created_at", { ascending: false })
+    .limit(500);
+  if (error) throw error;
+  return (data ?? []) as Listing[];
+}
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  display_name: string | null;
+  whatsapp: string | null;
+  created_at: string;
+  last_sign_in_at: string | null;
+  listing_count: number;
+  is_admin: boolean;
+}
+
+export async function fetchAdminUsers(): Promise<AdminUser[]> {
+  const { data, error } = await supabase.rpc("admin_list_users");
+  if (error) throw error;
+  return (data ?? []) as AdminUser[];
 }

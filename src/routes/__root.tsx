@@ -16,6 +16,8 @@ import { Footer } from "../components/Footer";
 import { FloatingWhatsApp } from "../components/WhatsAppButton";
 import { AuthProvider } from "../lib/auth";
 import { Toaster } from "../components/ui/sonner";
+import { AnnouncementBanner } from "../components/AnnouncementBanner";
+import { fetchSiteSettings } from "../lib/settings";
 
 function NotFoundComponent() {
   return (
@@ -89,6 +91,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" },
     ],
   }),
+  loader: () => fetchSiteSettings(),
+  staleTime: 60_000,
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -113,6 +117,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <div className="flex min-h-screen flex-col">
+          <AnnouncementBanner />
           <Header />
           <main className="flex-1">
             <Outlet />

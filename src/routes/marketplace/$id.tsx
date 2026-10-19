@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, MapPin, MessageCircle } from "lucide-react";
 import { SetupNotice } from "@/components/SetupNotice";
 import { fetchListing, formatPrice, mediaUrl, sortedMedia } from "@/lib/listings";
-import { waLink } from "@/lib/site";
+import { useWaLink } from "@/lib/settings";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/marketplace/$id")({
@@ -16,6 +16,7 @@ export const Route = createFileRoute("/marketplace/$id")({
 
 function ListingPage() {
   const { id } = Route.useParams();
+  const waLink = useWaLink();
   const [active, setActive] = useState(0);
   const { data: listing, isLoading, error } = useQuery({
     queryKey: ["listing", id],

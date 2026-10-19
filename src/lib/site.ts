@@ -1,17 +1,3 @@
-export const SITE = {
-  name: "Mallick Assist Service",
-  phone: "+37062434541",
-  phoneDisplay: "+370 624 34541",
-  whatsappBase: "https://wa.me/37062434541",
-  city: "Vilnius, Lithuania",
-  tiktok: "https://www.tiktok.com/@mallickinternational20",
-  tiktokHandle: "@mallickinternational20",
-};
-
-export function waLink(message: string) {
-  return `${SITE.whatsappBase}?text=${encodeURIComponent(message)}`;
-}
-
 export const SERVICES = [
   {
     slug: "short-term-accommodation",

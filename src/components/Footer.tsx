@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Phone, MapPin, Compass } from "lucide-react";
-import { SITE } from "@/lib/site";
+import { useSiteSettings } from "@/lib/settings";
 import { TikTokIcon } from "@/components/icons";
 
 export function Footer() {
+  const site = useSiteSettings();
   return (
     <footer className="mt-24 bg-primary text-primary-foreground">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 grid gap-10 md:grid-cols-4">
@@ -39,15 +40,15 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm text-primary-foreground/80">
             <li className="flex items-start gap-2">
               <Phone className="size-4 mt-0.5 shrink-0 text-accent" />
-              <a href={`tel:${SITE.phone}`} className="hover:text-accent">{SITE.phoneDisplay}</a>
+              <a href={`tel:${site.phone}`} className="hover:text-accent">{site.phone_display}</a>
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="size-4 mt-0.5 shrink-0 text-accent" />
-              <span>{SITE.city}</span>
+              <span>{site.city}</span>
             </li>
             <li className="flex items-start gap-2">
               <TikTokIcon className="size-4 mt-0.5 shrink-0 text-accent" />
-              <a href={SITE.tiktok} target="_blank" rel="noreferrer" className="hover:text-accent">{SITE.tiktokHandle}</a>
+              <a href={site.tiktok_url} target="_blank" rel="noreferrer" className="hover:text-accent">{site.tiktok_handle}</a>
             </li>
           </ul>
         </div>

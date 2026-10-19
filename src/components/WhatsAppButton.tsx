@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import { waLink } from "@/lib/site";
+import { useWaLink } from "@/lib/settings";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -17,6 +17,7 @@ export function WhatsAppButton({
   variant = "solid",
   size = "md",
 }: Props) {
+  const waLink = useWaLink();
   const sizes = {
     sm: "px-3 py-2 text-sm gap-1.5",
     md: "px-5 py-3 text-sm gap-2",
@@ -47,6 +48,7 @@ export function WhatsAppButton({
 }
 
 export function FloatingWhatsApp() {
+  const waLink = useWaLink();
   return (
     <a
       href={waLink("Hello Mallick Assist Service!")}

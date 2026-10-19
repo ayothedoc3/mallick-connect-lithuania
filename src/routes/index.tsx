@@ -3,7 +3,8 @@ import { Check, Sparkles, Clock, HeartHandshake, MapPin, ArrowRight, Quote, Mess
 import { ServiceCard } from "@/components/ServiceCard";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { SERVICES, SITE } from "@/lib/site";
+import { SERVICES } from "@/lib/site";
+import { useSiteSettings } from "@/lib/settings";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/")({
 const TONES = ["navy", "blue", "yellow", "blue", "light", "navy"] as const;
 
 function Home() {
+  const site = useSiteSettings();
   return (
     <>
       {/* HERO */}
@@ -184,8 +186,8 @@ function Home() {
           </p>
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <WhatsAppButton size="lg" className="w-full sm:w-auto" />
-            <a href={`tel:${SITE.phone}`} className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/30 px-6 py-3.5 text-sm font-bold hover:bg-white/10">
-              Call {SITE.phoneDisplay}
+            <a href={`tel:${site.phone}`} className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/30 px-6 py-3.5 text-sm font-bold hover:bg-white/10">
+              Call {site.phone_display}
             </a>
           </div>
           <div className="mt-8 grid grid-cols-3 gap-4 text-center">
@@ -243,9 +245,9 @@ function Home() {
             Send a WhatsApp message, give us a call, or fill out the form. We respond fast and we never spam.
           </p>
           <div className="mt-8 space-y-4">
-            <ContactRow label="WhatsApp & Calls" value={SITE.phoneDisplay} href={`tel:${SITE.phone}`} />
-            <ContactRow label="Based in" value={SITE.city} />
-            <ContactRow label="TikTok" value={SITE.tiktokHandle} href={SITE.tiktok} />
+            <ContactRow label="WhatsApp & Calls" value={site.phone_display} href={`tel:${site.phone}`} />
+            <ContactRow label="Based in" value={site.city} />
+            <ContactRow label="TikTok" value={site.tiktok_handle} href={site.tiktok_url} />
           </div>
           <div className="mt-8">
             <WhatsAppButton size="lg" />
