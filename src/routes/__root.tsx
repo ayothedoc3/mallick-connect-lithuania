@@ -82,8 +82,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Mallick Assist Service | Trusted support in Lithuania" },
       { name: "twitter:description", content: "Accommodation, hall rentals, currency exchange, buying & selling, and import/export support for migrants, students and diaspora across Lithuania." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9c419fbb-8c48-4668-96c0-1f7b079a6061/id-preview-b04937a6--4a818e6b-6022-44d0-90bb-ee53c71f32f3.lovable.app-1782310740290.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9c419fbb-8c48-4668-96c0-1f7b079a6061/id-preview-b04937a6--4a818e6b-6022-44d0-90bb-ee53c71f32f3.lovable.app-1782310740290.png" },
+      { property: "og:image", content: "https://mallickassistservice.com/og-image.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Mallick Assist Service: trusted support in Lithuania" },
+      { name: "twitter:image", content: "https://mallickassistservice.com/og-image.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
