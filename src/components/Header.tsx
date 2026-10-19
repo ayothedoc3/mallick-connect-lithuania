@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Compass, User } from "lucide-react";
+import { Menu, X, Compass, User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { useAuth } from "@/lib/auth";
@@ -57,6 +57,15 @@ export function Header() {
               <Link to="/sell" className="rounded-full bg-accent px-3.5 py-2 text-sm font-bold text-accent-foreground hover:brightness-105">
                 Sell
               </Link>
+              <button
+                onClick={signOut}
+                aria-label="Sign out"
+                title="Sign out"
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-semibold text-primary hover:bg-secondary"
+              >
+                <LogOut className="size-4" />
+                <span className="hidden xl:inline">Sign out</span>
+              </button>
             </>
           ) : (
             <Link
