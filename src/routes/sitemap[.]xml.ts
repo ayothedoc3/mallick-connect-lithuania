@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { fetchPublishedListings } from "@/lib/listings";
 
 const BASE_URL = "https://mallickassistservice.com";
 
 interface SitemapEntry {
   path: string;
+  lastmod?: string;
   changefreq?: "daily" | "weekly" | "monthly";
   priority?: string;
 }
@@ -25,11 +27,18 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/import-export", changefreq: "monthly", priority: "0.9" },
           { path: "/marketplace", changefreq: "daily", priority: "0.8" },
           { path: "/contact", changefreq: "monthly", priority: "0.8" },
+          ...(await fetchPublishedListings()).map((l) => ({
+            path: `/marketplace/${l.id}`,
+            lastmod: l.created_at.slice(0, 10),
+            changefreq: "weekly" as const,
+            priority: "0.6",
+          })),
         ];
         const urls = entries.map((e) =>
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,

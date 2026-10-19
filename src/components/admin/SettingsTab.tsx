@@ -35,6 +35,7 @@ export function SettingsTab() {
       tiktok_url: form.tiktok_url.trim(),
       tiktok_handle: form.tiktok_handle.trim(),
       banner_text: form.banner_text.trim(),
+      ga_measurement_id: form.ga_measurement_id.trim().toUpperCase(),
     });
   }
 
@@ -127,6 +128,30 @@ export function SettingsTab() {
             {form.banner_text}
           </div>
         )}
+      </fieldset>
+
+      <fieldset className="h-fit rounded-3xl border border-border bg-card p-6 shadow-soft">
+        <legend className="px-2 font-display text-lg font-extrabold text-primary">
+          Google Analytics
+        </legend>
+        <p className="text-sm text-muted-foreground">
+          Paste your GA4 Measurement ID to start tracking visitors. Leave it empty to switch
+          analytics off. Visitors are asked for cookie consent first, as EU law requires.
+        </p>
+        <div className="mt-4">
+          <Field
+            label="Measurement ID"
+            hint="Google Analytics → Admin → Data streams → your website stream. Looks like G-ABC123XYZ."
+          >
+            <input
+              value={form.ga_measurement_id}
+              onChange={set("ga_measurement_id")}
+              pattern="[Gg]-[A-Za-z0-9]{4,20}"
+              placeholder="G-XXXXXXXXXX"
+              className={inputCls}
+            />
+          </Field>
+        </div>
       </fieldset>
 
       <div className="lg:col-span-2">

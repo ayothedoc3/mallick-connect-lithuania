@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Phone, MapPin, Compass } from "lucide-react";
 import { useSiteSettings } from "@/lib/settings";
+import { resetCookieConsent } from "@/lib/consent";
 import { TikTokIcon } from "@/components/icons";
 
 export function Footer() {
@@ -56,7 +57,14 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 text-xs text-primary-foreground/60 flex flex-wrap justify-between gap-2">
           <span>© {new Date().getFullYear()} Mallick Assist Service. All rights reserved.</span>
-          <span>Made with care for our community in Lithuania.</span>
+          <span className="flex flex-wrap gap-4">
+            {site.ga_measurement_id && (
+              <button onClick={resetCookieConsent} className="underline hover:text-accent">
+                Cookie settings
+              </button>
+            )}
+            <span>Made with care for our community in Lithuania.</span>
+          </span>
         </div>
       </div>
     </footer>

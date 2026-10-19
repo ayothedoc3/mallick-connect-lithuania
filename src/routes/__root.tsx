@@ -17,6 +17,7 @@ import { FloatingWhatsApp } from "../components/WhatsAppButton";
 import { AuthProvider } from "../lib/auth";
 import { Toaster } from "../components/ui/sonner";
 import { AnnouncementBanner } from "../components/AnnouncementBanner";
+import { Analytics } from "../components/Analytics";
 import { fetchSiteSettings } from "../lib/settings";
 
 function NotFoundComponent() {
@@ -86,6 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" },
@@ -125,6 +127,7 @@ function RootComponent() {
           <Footer />
           <FloatingWhatsApp />
         </div>
+        <Analytics />
         <Toaster position="top-center" richColors />
       </AuthProvider>
     </QueryClientProvider>

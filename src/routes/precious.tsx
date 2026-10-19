@@ -4,19 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { isAdminUser } from "@/lib/listings";
+import { fetchStaffRole, type StaffRole } from "@/lib/listings";
 import { ListingsTab } from "@/components/admin/ListingsTab";
 import { UsersTab } from "@/components/admin/UsersTab";
 import { RequestsTab } from "@/components/admin/RequestsTab";
 import { SettingsTab } from "@/components/admin/SettingsTab";
 import { cn } from "@/lib/utils";
 
+// Managers handle listings and requests; admins also manage users, staff and site settings.
 const TABS = [
-  { id: "listings", label: "Listings" },
-  { id: "requests", label: "Requests" },
-  { id: "users", label: "Users" },
-  { id: "settings", label: "Site settings" },
-] as const;
+  { id: "listings", label: "Listings", roles: ["admin", "manager"] },
+  { id: "requests", label: "Requests", roles: ["admin", "manager"] },
+  { id: "users", label: "Users & staff", roles: ["admin"] },
+  { id: "settings", label: "Site settings", roles: ["admin"] },
+] as const satisfies readonly { id: string; label: string; roles: readonly StaffRole[] }[];
 type Tab = (typeof TABS)[number]["id"];
 
 export const Route = createFileRoute("/precious")({
@@ -36,20 +37,20 @@ function AdminPage() {
   const { user, loading, signOut } = useAuth();
   const { tab } = Route.useSearch();
 
-  const admin = useQuery({
-    queryKey: ["is-admin", user?.id],
-    queryFn: isAdminUser,
+  const role = useQuery({
+    queryKey: ["staff-role", user?.id],
+    queryFn: fetchStaffRole,
     enabled: Boolean(user),
   });
 
-  if (loading || (user && admin.isLoading)) {
+  if (loading || (user && role.isLoading)) {
     return <Centered>Loading…</Centered>;
   }
   if (!user) return <AdminLogin />;
-  if (admin.error) {
-    return <Centered>Could not check admin access: {(admin.error as Error).message}</Centered>;
+  if (role.error) {
+    return <Centered>Could not check admin access: {(role.error as Error).message}</Centered>;
   }
-  if (!admin.data) {
+  if (!role.data) {
     return (
       <Centered>
         <p className="font-semibold text-primary">This account does not have admin access.</p>
@@ -64,11 +65,17 @@ function AdminPage() {
     );
   }
 
+  const myRole = role.data;
+  const tabs = TABS.filter((t) => (t.roles as readonly StaffRole[]).includes(myRole));
+  const active = tabs.some((t) => t.id === tab) ? tab : "listings";
+
   return (
     <section className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl font-extrabold text-primary">Admin</h1>
+          <h1 className="font-display text-3xl font-extrabold text-primary">
+            {myRole === "admin" ? "Admin" : "Manager"}
+          </h1>
           <p className="text-sm text-muted-foreground">Signed in as {user.email}</p>
         </div>
         <button
@@ -80,14 +87,14 @@ function AdminPage() {
       </div>
 
       <nav className="mt-6 flex gap-1 overflow-x-auto rounded-full bg-secondary p-1">
-        {TABS.map((t) => (
+        {tabs.map((t) => (
           <Link
             key={t.id}
             to="/precious"
             search={{ tab: t.id }}
             className={cn(
               "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
-              tab === t.id
+              active === t.id
                 ? "bg-primary text-primary-foreground shadow-soft"
                 : "text-primary hover:bg-background/60",
             )}
@@ -98,10 +105,10 @@ function AdminPage() {
       </nav>
 
       <div className="mt-8">
-        {tab === "listings" && <ListingsTab />}
-        {tab === "requests" && <RequestsTab />}
-        {tab === "users" && <UsersTab />}
-        {tab === "settings" && <SettingsTab />}
+        {active === "listings" && <ListingsTab />}
+        {active === "requests" && <RequestsTab />}
+        {active === "users" && <UsersTab myId={user.id} />}
+        {active === "settings" && <SettingsTab />}
       </div>
     </section>
   );

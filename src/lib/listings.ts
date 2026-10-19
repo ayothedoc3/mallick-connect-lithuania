@@ -206,7 +206,7 @@ export async function createListing(
   }
 }
 
-// ───────────── Admin helpers (RLS only lets admins use these) ─────────────
+// ───────────── Staff helpers (RLS only lets staff use these) ─────────────
 
 export interface SellerProfile {
   id: string;
@@ -229,10 +229,18 @@ export async function setListingStatus(id: string, status: ListingStatus) {
   if (error) throw error;
 }
 
-export async function isAdminUser(): Promise<boolean> {
-  const { data, error } = await supabase.rpc("is_admin");
+export type StaffRole = "admin" | "manager";
+
+/** The signed-in user's staff role, or null for regular users. */
+export async function fetchStaffRole(): Promise<StaffRole | null> {
+  const { data, error } = await supabase.rpc("staff_role");
   if (error) throw error;
-  return data as boolean;
+  return data as StaffRole | null;
+}
+
+export async function setStaffRole(userId: string, role: StaffRole | null) {
+  const { error } = await supabase.rpc("set_staff_role", { target: userId, new_role: role });
+  if (error) throw error;
 }
 
 export async function fetchAllListings(): Promise<Listing[]> {
@@ -253,7 +261,7 @@ export interface AdminUser {
   created_at: string;
   last_sign_in_at: string | null;
   listing_count: number;
-  is_admin: boolean;
+  role: StaffRole | null;
 }
 
 export async function fetchAdminUsers(): Promise<AdminUser[]> {

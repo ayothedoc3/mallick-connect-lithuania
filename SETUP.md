@@ -33,18 +33,30 @@ Add them as environment variables where the site is built:
 Never use the `service_role` key in the site.
 
 ## 4. Admin panel (/precious)
-Run `supabase/admin.sql` after `schema.sql`. It adds admins, site settings (contact details and
-announcement banner) and the service-requests inbox. The site needs the `site_settings` row to load.
+Run `supabase/admin.sql` after `schema.sql`. It adds staff roles, site settings (contact details,
+announcement banner, Google Analytics ID) and the service-requests inbox. The site needs the
+`site_settings` row to load. Databases created before staff roles existed: run
+`supabase/migrations/2026-10-19-staff-roles.sql` once first.
 
-To make someone an admin, they sign up on the site first, then run in the SQL editor:
+Make the first admin (they sign up on the site first), in the SQL editor:
 
 ```sql
-insert into public.admins (user_id) select id from auth.users where email = 'their@email.com';
+insert into public.staff (user_id, role) select id, 'admin' from auth.users where email = 'their@email.com';
 ```
 
-They then sign in at `/precious` to approve, reject, mark sold or delete listings, see users,
-read service requests, and edit contact details and the banner. New listings start as
-**pending** and are invisible to the public until approved.
+After that, admins add managers and other admins from **/precious → Users & staff**.
+
+| Role | Can do |
+| --- | --- |
+| Manager | Approve, reject, mark sold and delete listings; handle service requests |
+| Admin | Everything a manager can, plus users, staff roles, site settings and analytics |
+
+New listings start as **pending** and are invisible to the public until approved. If a seller
+edits an approved listing, it goes back to pending.
+
+## 5. Google Analytics
+Admins paste the GA4 Measurement ID (`G-...`) in **/precious → Site settings**. Visitors are
+asked for cookie consent first and GA only loads if they accept.
 
 ## Notes
 - Buyers tap **Ask about this item**, which opens WhatsApp to the Mallick number with the item

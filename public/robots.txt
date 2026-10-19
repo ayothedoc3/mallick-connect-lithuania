@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /auth
+Disallow: /my-listings
+Disallow: /sell
 
-Sitemap: https://mallick-connect-lithuania.lovable.app/sitemap.xml
+Sitemap: https://mallickassistservice.com/sitemap.xml
