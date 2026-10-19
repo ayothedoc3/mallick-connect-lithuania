@@ -40,18 +40,20 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 // Lovable previews may run without the Supabase variables (pages show a setup notice then).
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const API_ORIGIN = SUPABASE_URL ? new URL(SUPABASE_URL).origin : "";
+const TURNSTILE = "https://challenges.cloudflare.com";
 const GA =
   "https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com";
 
 // Inline scripts are needed for SSR hydration and Google Analytics bootstrapping.
 const CSP = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com`,
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com ${TURNSTILE}`,
+  `frame-src ${TURNSTILE}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
   `img-src 'self' data: blob: ${API_ORIGIN} ${GA}`,
   `media-src 'self' blob: ${API_ORIGIN}`,
-  `connect-src 'self' ${API_ORIGIN} ${GA}`,
+  `connect-src 'self' ${API_ORIGIN} ${GA} ${TURNSTILE}`,
   // Only Lovable's editor may show the site in a frame.
   "frame-ancestors 'self' https://lovable.dev https://*.lovable.dev https://*.lovable.app",
   "base-uri 'self'",

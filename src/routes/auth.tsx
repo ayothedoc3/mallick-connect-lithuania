@@ -1,9 +1,10 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { SetupNotice } from "@/components/SetupNotice";
+import { Turnstile, type TurnstileHandle } from "@/components/Turnstile";
 
 type Redirect = "/sell" | "/my-listings";
 
@@ -31,6 +32,8 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
   const [form, setForm] = useState({ name: "", whatsapp: "", email: "", password: "" });
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captcha = useRef<TurnstileHandle>(null);
 
   const target: Redirect = redirect ?? "/my-listings";
 
@@ -43,12 +46,17 @@ function AuthPage() {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error("Please complete the security check.");
+      return;
+    }
     setBusy(true);
     try {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({
           email: form.email.trim(),
           password: form.password,
+          options: { captchaToken },
         });
         if (error) throw error;
         navigate({ to: target });
@@ -59,6 +67,7 @@ function AuthPage() {
           options: {
             data: { display_name: form.name.trim(), whatsapp: form.whatsapp.trim() },
             emailRedirectTo: `${window.location.origin}${target}`,
+            captchaToken,
           },
         });
         if (error) throw error;
@@ -71,6 +80,7 @@ function AuthPage() {
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
+      captcha.current?.reset();
       setBusy(false);
     }
   }
@@ -127,9 +137,10 @@ function AuthPage() {
               />
               {mode === "signup" && <span className="mt-1 block text-xs text-muted-foreground">At least 8 characters.</span>}
             </label>
+            <Turnstile ref={captcha} onToken={setCaptchaToken} />
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || !captchaToken}
               className="rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground hover:bg-primary-bright transition shadow-soft disabled:opacity-60"
             >
               {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}

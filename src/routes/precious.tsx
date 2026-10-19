@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import { UsersTab } from "@/components/admin/UsersTab";
 import { RequestsTab } from "@/components/admin/RequestsTab";
 import { SettingsTab } from "@/components/admin/SettingsTab";
 import { cn } from "@/lib/utils";
+import { Turnstile, type TurnstileHandle } from "@/components/Turnstile";
 
 // Managers handle listings and requests; admins also manage users, staff and site settings.
 const TABS = [
@@ -129,11 +130,19 @@ function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captcha = useRef<TurnstileHandle>(null);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (!captchaToken) return;
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+      options: { captchaToken },
+    });
+    captcha.current?.reset();
     setBusy(false);
     if (error) toast.error(error.message);
   }
@@ -172,9 +181,10 @@ function AdminLogin() {
               autoComplete="current-password"
             />
           </label>
+          <Turnstile ref={captcha} onToken={setCaptchaToken} />
           <button
             type="submit"
-            disabled={busy}
+            disabled={busy || !captchaToken}
             className="rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-soft transition hover:bg-primary-bright disabled:opacity-60"
           >
             {busy ? "Signing in…" : "Sign in"}
