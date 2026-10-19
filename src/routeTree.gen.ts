@@ -12,14 +12,19 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShortTermAccommodationRouteImport } from './routes/short-term-accommodation'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SellRouteImport } from './routes/sell'
+import { Route as MyListingsRouteImport } from './routes/my-listings'
 import { Route as LongTermAccommodationRouteImport } from './routes/long-term-accommodation'
 import { Route as ImportExportRouteImport } from './routes/import-export'
 import { Route as HallRentalsRouteImport } from './routes/hall-rentals'
 import { Route as CurrencyExchangeRouteImport } from './routes/currency-exchange'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BuyingSellingRouteImport } from './routes/buying-selling'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AccommodationRouteImport } from './routes/accommodation'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MarketplaceIndexRouteImport } from './routes/marketplace/index'
+import { Route as MarketplaceIdRouteImport } from './routes/marketplace/$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -34,6 +39,16 @@ const ShortTermAccommodationRoute = ShortTermAccommodationRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SellRoute = SellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyListingsRoute = MyListingsRouteImport.update({
+  id: '/my-listings',
+  path: '/my-listings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LongTermAccommodationRoute = LongTermAccommodationRouteImport.update({
@@ -66,6 +81,11 @@ const BuyingSellingRoute = BuyingSellingRouteImport.update({
   path: '/buying-selling',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccommodationRoute = AccommodationRouteImport.update({
   id: '/accommodation',
   path: '/accommodation',
@@ -76,101 +96,146 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketplaceIndexRoute = MarketplaceIndexRouteImport.update({
+  id: '/marketplace/',
+  path: '/marketplace/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceIdRoute = MarketplaceIdRouteImport.update({
+  id: '/marketplace/$id',
+  path: '/marketplace/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accommodation': typeof AccommodationRoute
+  '/auth': typeof AuthRoute
   '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
   '/currency-exchange': typeof CurrencyExchangeRoute
   '/hall-rentals': typeof HallRentalsRoute
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
+  '/my-listings': typeof MyListingsRoute
+  '/sell': typeof SellRoute
   '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/marketplace/$id': typeof MarketplaceIdRoute
+  '/marketplace/': typeof MarketplaceIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accommodation': typeof AccommodationRoute
+  '/auth': typeof AuthRoute
   '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
   '/currency-exchange': typeof CurrencyExchangeRoute
   '/hall-rentals': typeof HallRentalsRoute
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
+  '/my-listings': typeof MyListingsRoute
+  '/sell': typeof SellRoute
   '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/marketplace/$id': typeof MarketplaceIdRoute
+  '/marketplace': typeof MarketplaceIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accommodation': typeof AccommodationRoute
+  '/auth': typeof AuthRoute
   '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
   '/currency-exchange': typeof CurrencyExchangeRoute
   '/hall-rentals': typeof HallRentalsRoute
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
+  '/my-listings': typeof MyListingsRoute
+  '/sell': typeof SellRoute
   '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/marketplace/$id': typeof MarketplaceIdRoute
+  '/marketplace/': typeof MarketplaceIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/accommodation'
+    | '/auth'
     | '/buying-selling'
     | '/contact'
     | '/currency-exchange'
     | '/hall-rentals'
     | '/import-export'
     | '/long-term-accommodation'
+    | '/my-listings'
+    | '/sell'
     | '/services'
     | '/short-term-accommodation'
     | '/sitemap.xml'
+    | '/marketplace/$id'
+    | '/marketplace/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accommodation'
+    | '/auth'
     | '/buying-selling'
     | '/contact'
     | '/currency-exchange'
     | '/hall-rentals'
     | '/import-export'
     | '/long-term-accommodation'
+    | '/my-listings'
+    | '/sell'
     | '/services'
     | '/short-term-accommodation'
     | '/sitemap.xml'
+    | '/marketplace/$id'
+    | '/marketplace'
   id:
     | '__root__'
     | '/'
     | '/accommodation'
+    | '/auth'
     | '/buying-selling'
     | '/contact'
     | '/currency-exchange'
     | '/hall-rentals'
     | '/import-export'
     | '/long-term-accommodation'
+    | '/my-listings'
+    | '/sell'
     | '/services'
     | '/short-term-accommodation'
     | '/sitemap.xml'
+    | '/marketplace/$id'
+    | '/marketplace/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccommodationRoute: typeof AccommodationRoute
+  AuthRoute: typeof AuthRoute
   BuyingSellingRoute: typeof BuyingSellingRoute
   ContactRoute: typeof ContactRoute
   CurrencyExchangeRoute: typeof CurrencyExchangeRoute
   HallRentalsRoute: typeof HallRentalsRoute
   ImportExportRoute: typeof ImportExportRoute
   LongTermAccommodationRoute: typeof LongTermAccommodationRoute
+  MyListingsRoute: typeof MyListingsRoute
+  SellRoute: typeof SellRoute
   ServicesRoute: typeof ServicesRoute
   ShortTermAccommodationRoute: typeof ShortTermAccommodationRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  MarketplaceIdRoute: typeof MarketplaceIdRoute
+  MarketplaceIndexRoute: typeof MarketplaceIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -194,6 +259,20 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sell': {
+      id: '/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-listings': {
+      id: '/my-listings'
+      path: '/my-listings'
+      fullPath: '/my-listings'
+      preLoaderRoute: typeof MyListingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/long-term-accommodation': {
@@ -238,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BuyingSellingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/accommodation': {
       id: '/accommodation'
       path: '/accommodation'
@@ -252,21 +338,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/marketplace/': {
+      id: '/marketplace/'
+      path: '/marketplace'
+      fullPath: '/marketplace/'
+      preLoaderRoute: typeof MarketplaceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace/$id': {
+      id: '/marketplace/$id'
+      path: '/marketplace/$id'
+      fullPath: '/marketplace/$id'
+      preLoaderRoute: typeof MarketplaceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccommodationRoute: AccommodationRoute,
+  AuthRoute: AuthRoute,
   BuyingSellingRoute: BuyingSellingRoute,
   ContactRoute: ContactRoute,
   CurrencyExchangeRoute: CurrencyExchangeRoute,
   HallRentalsRoute: HallRentalsRoute,
   ImportExportRoute: ImportExportRoute,
   LongTermAccommodationRoute: LongTermAccommodationRoute,
+  MyListingsRoute: MyListingsRoute,
+  SellRoute: SellRoute,
   ServicesRoute: ServicesRoute,
   ShortTermAccommodationRoute: ShortTermAccommodationRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  MarketplaceIdRoute: MarketplaceIdRoute,
+  MarketplaceIndexRoute: MarketplaceIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

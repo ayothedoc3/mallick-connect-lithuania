@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, ShoppingCart, Tag, Search, Handshake } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
@@ -37,7 +37,15 @@ function BuyingSellingPage() {
         title={<>Buy what you need, sell what you <span className="text-accent">do not</span></>}
         subtitle="Setting up a new home or moving on? We connect you with trusted buyers and sellers in the community, so nothing goes to waste."
       >
-        <WhatsAppButton size="lg" label="Ask about buying or selling" />
+        <div className="flex flex-wrap gap-3">
+          <Link to="/marketplace" className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3.5 text-base font-bold text-accent-foreground shadow-soft hover:brightness-105">
+            Browse the marketplace
+          </Link>
+          <Link to="/sell" className="inline-flex items-center justify-center rounded-full border-2 border-white/40 px-6 py-3.5 text-base font-bold text-primary-foreground hover:bg-white/10">
+            Sell an item
+          </Link>
+          <WhatsAppButton size="lg" label="Ask about buying or selling" />
+        </div>
       </PageHero>
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-16">

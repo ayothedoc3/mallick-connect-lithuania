@@ -5,7 +5,7 @@ const BASE_URL = "https://mallickassistservice.com";
 
 interface SitemapEntry {
   path: string;
-  changefreq?: "weekly" | "monthly";
+  changefreq?: "daily" | "weekly" | "monthly";
   priority?: string;
 }
 
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/hall-rentals", changefreq: "monthly", priority: "0.9" },
           { path: "/buying-selling", changefreq: "monthly", priority: "0.8" },
           { path: "/import-export", changefreq: "monthly", priority: "0.9" },
+          { path: "/marketplace", changefreq: "daily", priority: "0.8" },
           { path: "/contact", changefreq: "monthly", priority: "0.8" },
         ];
         const urls = entries.map((e) =>

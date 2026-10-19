@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Compass } from "lucide-react";
+import { Menu, X, Compass, User } from "lucide-react";
 import { useState } from "react";
 import { WhatsAppButton } from "./WhatsAppButton";
+import { useAuth } from "@/lib/auth";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -9,11 +10,13 @@ const NAV = [
   { to: "/accommodation", label: "Accommodation" },
   { to: "/hall-rentals", label: "Hall Rentals" },
   { to: "/import-export", label: "Import & Export" },
+  { to: "/marketplace", label: "Marketplace" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { user, signOut } = useAuth();
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -41,7 +44,28 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center gap-2">
+          {user ? (
+            <>
+              <Link
+                to="/my-listings"
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-semibold text-primary hover:bg-secondary"
+              >
+                <User className="size-4" />
+                <span className="hidden xl:inline">My listings</span>
+              </Link>
+              <Link to="/sell" className="rounded-full bg-accent px-3.5 py-2 text-sm font-bold text-accent-foreground hover:brightness-105">
+                Sell
+              </Link>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-sm font-semibold text-primary hover:bg-secondary"
+            >
+              <User className="size-4" /> Sign in
+            </Link>
+          )}
           <WhatsAppButton size="sm" label="WhatsApp" />
         </div>
 
@@ -69,6 +93,26 @@ export function Header() {
                 {n.label}
               </Link>
             ))}
+            {user ? (
+              <>
+                <Link to="/sell" onClick={() => setOpen(false)} className="px-3 py-2.5 rounded-lg text-sm font-semibold bg-accent text-accent-foreground">
+                  Sell an item
+                </Link>
+                <Link to="/my-listings" onClick={() => setOpen(false)} className="px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-secondary">
+                  My listings
+                </Link>
+                <button
+                  onClick={() => { setOpen(false); signOut(); }}
+                  className="px-3 py-2.5 rounded-lg text-left text-sm font-medium hover:bg-secondary"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <Link to="/auth" onClick={() => setOpen(false)} className="px-3 py-2.5 rounded-lg text-sm font-semibold hover:bg-secondary">
+                Sign in / Create account
+              </Link>
+            )}
             <WhatsAppButton className="mt-2 w-full" />
           </div>
         </div>

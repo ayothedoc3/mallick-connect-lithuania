@@ -28,6 +28,7 @@ export function Footer() {
             <li><Link to="/currency-exchange" className="hover:text-accent">Currency Exchange</Link></li>
             <li><Link to="/hall-rentals" className="hover:text-accent">Hall Rentals</Link></li>
             <li><Link to="/buying-selling" className="hover:text-accent">Buying & Selling</Link></li>
+            <li><Link to="/marketplace" className="hover:text-accent">Marketplace</Link></li>
             <li><Link to="/import-export" className="hover:text-accent">Import & Export</Link></li>
             <li><Link to="/services" className="hover:text-accent">All Services</Link></li>
           </ul>
