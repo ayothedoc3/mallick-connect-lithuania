@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Sparkles, Clock, HeartHandshake, MapPin, ArrowRight, Quote, MessageSquare, ClipboardList, Compass, ShoppingBag, Tag } from "lucide-react";
 import { ServiceCard } from "@/components/ServiceCard";
 import { ListingCard } from "@/components/ListingCard";
+import { FounderVideo } from "@/components/FounderVideo";
 import { fetchPublishedListings } from "@/lib/listings";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -84,26 +85,19 @@ function Home() {
             </div>
           </div>
 
-          {/* Hero card stack */}
-          <div className="relative hidden lg:block">
+          {/* Founder video */}
+          <figure className="relative mx-auto w-full max-w-[300px] lg:mr-0 lg:max-w-[340px]">
             <div className="absolute -top-6 -right-6 size-56 rounded-full bg-accent/30 blur-3xl" />
-            <div className="absolute -bottom-10 -left-10 size-72 rounded-full bg-primary-bright/40 blur-3xl" />
-            <div className="relative grid grid-cols-2 gap-4">
-              {SERVICES.slice(0, 4).map((s, i) => (
-                <div
-                  key={s.slug}
-                  className={`rounded-3xl p-5 backdrop-blur ${
-                    i % 2 === 0 ? "bg-white/10 border border-white/20" : "bg-accent text-accent-foreground"
-                  } ${i === 1 ? "translate-y-6" : ""} ${i === 2 ? "-translate-y-6" : ""}`}
-                >
-                  <div className="grid size-11 place-items-center rounded-xl bg-white/95 text-primary">
-                    <Compass className="size-5" />
-                  </div>
-                  <p className="mt-3 font-display font-extrabold leading-tight">{s.title}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+            <FounderVideo
+              video="mission"
+              preview
+              label="Our founder on helping African students settle into Vilnius"
+              className="relative"
+            />
+            <figcaption className="relative mt-4 text-center text-sm text-primary-foreground/80">
+              Our founder on helping students settle into Vilnius
+            </figcaption>
+          </figure>
         </div>
       </section>
 
@@ -208,52 +202,48 @@ function Home() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20 grid lg:grid-cols-[1.4fr_1fr] gap-12 items-center">
         <div>
           <span className="text-xs font-bold uppercase tracking-widest text-primary-bright">Why choose us</span>
           <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-primary">
             Built on trust. Powered by community.
           </h2>
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 max-w-xl text-muted-foreground">
             We're not a faceless agency. We're part of the diaspora community in Lithuania,
             and we treat every request like it's for family.
           </p>
-          <div className="mt-8 grid sm:grid-cols-2 gap-5">
+          <ul className="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2">
             {[
               { icon: HeartHandshake, t: "Trusted by community", d: "Recommended across diaspora networks." },
               { icon: MapPin, t: "Local Lithuania support", d: "On-the-ground knowledge in every city." },
               { icon: Clock, t: "Fast response", d: "Most WhatsApp messages answered within minutes." },
               { icon: Sparkles, t: "Diaspora-friendly", d: "We speak your language, literally and figuratively." },
             ].map((f) => (
-              <div key={f.t} className="rounded-2xl border border-border bg-card p-5">
-                <f.icon className="size-6 text-accent-foreground bg-accent rounded-lg p-1" />
-                <p className="mt-3 font-display font-extrabold text-primary">{f.t}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{f.d}</p>
-              </div>
+              <li key={f.t} className="flex gap-3">
+                <f.icon className="mt-0.5 size-6 shrink-0 rounded-lg bg-accent p-1 text-accent-foreground" />
+                <div>
+                  <p className="font-display font-extrabold text-primary">{f.t}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{f.d}</p>
+                </div>
+              </li>
             ))}
-          </div>
-        </div>
-        <div className="rounded-3xl bg-primary p-8 sm:p-10 text-primary-foreground relative overflow-hidden">
-          <div className="absolute -top-10 -right-10 size-44 rounded-full bg-accent/40 blur-2xl" />
-          <h2 className="font-display text-2xl font-extrabold">Need something fast?</h2>
-          <p className="mt-2 text-primary-foreground/80">
-            Send us a WhatsApp message and we'll respond within minutes during working hours.
-          </p>
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <WhatsAppButton size="lg" className="w-full sm:w-auto" />
-            <a href={`tel:${site.phone}`} className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/30 px-6 py-3.5 text-sm font-bold hover:bg-white/10">
-              Call {site.phone_display}
-            </a>
-          </div>
-          <div className="mt-8 grid grid-cols-3 gap-4 text-center">
-            {[["500+", "Clients helped"], ["6", "Services"], ["24/7", "WhatsApp"]].map(([n, l]) => (
+          </ul>
+          <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-border pt-8">
+            {[["500+", "Clients helped"], ["6", "Services"], ["24/7", "On WhatsApp"]].map(([n, l]) => (
               <div key={l}>
-                <div className="font-display text-3xl font-extrabold text-accent">{n}</div>
-                <div className="text-xs uppercase tracking-wider opacity-75 mt-1">{l}</div>
+                <dt className="sr-only">{l}</dt>
+                <dd className="font-display text-3xl sm:text-4xl font-extrabold text-primary">{n}</dd>
+                <dd className="mt-1 text-sm text-muted-foreground">{l}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
+        <figure className="mx-auto w-full max-w-[320px]">
+          <FounderVideo video="intro" label="A message from our founder" />
+          <figcaption className="mt-4 text-center text-sm text-muted-foreground">
+            A message from our founder
+          </figcaption>
+        </figure>
       </section>
 
       {/* TESTIMONIALS */}

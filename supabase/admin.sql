@@ -186,3 +186,13 @@ drop policy if exists "requests admin all" on public.service_requests;
 drop policy if exists "requests staff all" on public.service_requests;
 create policy "requests staff all" on public.service_requests
   for all to authenticated using (public.is_staff()) with check (public.is_staff());
+
+-- ───────────────────────── Site media ─────────────────────────
+-- Public files used by the site itself (founder videos, posters). Uploaded by
+-- the developer with the service key; nobody can write here from the site.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('site-media', 'site-media', true, 52428800, array['video/mp4', 'image/jpeg', 'image/png', 'image/webp'])
+on conflict (id) do update
+  set public = excluded.public,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
