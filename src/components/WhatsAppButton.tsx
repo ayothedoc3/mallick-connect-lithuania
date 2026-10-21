@@ -55,7 +55,7 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-4 right-4 z-50 grid size-12 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-card lg:hidden"
+      className="fixed bottom-4 right-4 z-50 grid size-12 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-card xl:hidden"
     >
       <MessageCircle className="size-6" strokeWidth={2.5} />
     </a>

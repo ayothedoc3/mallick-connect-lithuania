@@ -54,6 +54,13 @@ create table if not exists public.listings (
 );
 create index if not exists listings_status_created_idx on public.listings (status, created_at desc);
 create index if not exists listings_user_idx on public.listings (user_id);
+-- A listing is either an item for sale or a service a local provider offers.
+-- For services, price_eur is the starting price and price_unit what it is charged per.
+alter table public.listings add column if not exists kind text not null default 'item'
+  check (kind in ('item', 'service'));
+alter table public.listings add column if not exists price_unit text
+  check (price_unit is null or price_unit in ('hour', 'session', 'person', 'job'));
+create index if not exists listings_kind_status_created_idx on public.listings (kind, status, created_at desc);
 alter table public.listings enable row level security;
 
 -- Everyone sees live/sold listings; owners also see their own pending/rejected ones.

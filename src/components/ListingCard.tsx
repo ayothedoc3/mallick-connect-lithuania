@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { MapPin, PlayCircle } from "lucide-react";
-import { formatPrice, mediaUrl, sortedMedia, type Listing } from "@/lib/listings";
+import { mediaUrl, priceLabel, sortedMedia, type Listing } from "@/lib/listings";
 
 export function ListingCard({ listing }: { listing: Listing }) {
   const media = sortedMedia(listing);
@@ -9,7 +9,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
 
   return (
     <Link
-      to="/marketplace/$id"
+      to={listing.kind === "service" ? "/services/$id" : "/marketplace/$id"}
       params={{ id: listing.id }}
       className="group block h-full overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-card"
     >
@@ -35,7 +35,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
         <h3 className="mt-1 line-clamp-2 font-display text-base font-extrabold leading-tight text-primary">
           {listing.title}
         </h3>
-        <p className="mt-2 font-display text-lg font-extrabold text-primary-bright">{formatPrice(listing.price_eur)}</p>
+        <p className="mt-2 font-display text-lg font-extrabold text-primary-bright">{priceLabel(listing)}</p>
         {listing.city && (
           <p className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
             <MapPin className="size-3.5" /> {listing.city}

@@ -54,6 +54,12 @@ After that, admins add managers and other admins from **/precious → Users & st
 New listings start as **pending** and are invisible to the public until approved. If a seller
 edits an approved listing, it goes back to pending.
 
+## Local services
+The same listings table holds items (`kind = 'item'`, shown on /marketplace) and services
+(`kind = 'service'`, shown under "Local pros" on /services). Providers choose "A service I offer"
+on /sell. Services have a starting price and what it's charged per (`price_unit`). Approval,
+photos, videos and the admin panel work the same for both.
+
 ## 5. Google Analytics
 Admins paste the GA4 Measurement ID (`G-...`) in **/precious → Site settings**. Visitors are
 asked for cookie consent first and GA only loads if they accept.

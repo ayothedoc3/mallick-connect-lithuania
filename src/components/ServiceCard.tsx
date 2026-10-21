@@ -1,36 +1,44 @@
 import { Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
 import { SERVICE_ICONS } from "./icons";
+import { cn } from "@/lib/utils";
 
 interface Props {
   title: string;
   description: string;
   icon: string;
   href?: string;
+  tone?: "navy" | "blue" | "yellow" | "light";
 }
 
-export function ServiceCard({ title, description, icon, href }: Props) {
+const TONES = {
+  navy: "bg-primary text-primary-foreground",
+  blue: "bg-primary-bright text-primary-foreground",
+  yellow: "bg-accent text-accent-foreground",
+  light: "bg-secondary text-secondary-foreground",
+};
+
+export function ServiceCard({ title, description, icon, href, tone = "light" }: Props) {
   const Icon = SERVICE_ICONS[icon] ?? SERVICE_ICONS.home;
   const inner = (
-    <div className="group h-full rounded-3xl border border-border bg-card p-6 transition-colors hover:border-primary sm:p-7">
-      <div className="grid size-12 place-items-center rounded-2xl bg-accent text-accent-foreground">
-        <Icon className="size-6" strokeWidth={2.2} />
+    <div className={cn(
+      "group relative h-full rounded-3xl p-6 sm:p-7 transition-all hover:-translate-y-1 hover:shadow-card",
+      TONES[tone],
+    )}>
+      <div className="grid size-14 place-items-center rounded-2xl bg-white/95 text-primary shadow-soft">
+        <Icon className="size-7" strokeWidth={2.2} />
       </div>
-      <h3 className="mt-5 font-display text-lg font-extrabold leading-tight text-primary">
-        {title}
-      </h3>
-      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+      <h3 className="mt-5 font-display text-lg font-extrabold leading-tight">{title}</h3>
+      <p className={cn("mt-2 text-sm", tone === "light" ? "text-muted-foreground" : "opacity-85")}>
+        {description}
+      </p>
       {href && (
-        <span className="mt-5 inline-block text-sm font-bold text-primary underline decoration-border underline-offset-4 group-hover:decoration-primary">
-          Learn more
+        <span className="mt-5 inline-flex items-center gap-1 text-sm font-bold">
+          About {title}
+          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
         </span>
       )}
     </div>
   );
-  return href ? (
-    <Link to={href} aria-label={title} className="block h-full">
-      {inner}
-    </Link>
-  ) : (
-    inner
-  );
+  return href ? <Link to={href} aria-label={`About ${title}`} className="block h-full">{inner}</Link> : inner;
 }

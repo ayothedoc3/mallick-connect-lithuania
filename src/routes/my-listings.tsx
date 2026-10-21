@@ -8,7 +8,7 @@ import { useAuth } from "@/lib/auth";
 import {
   deleteListing,
   fetchMyListings,
-  formatPrice,
+  priceLabel,
   markListingSold,
   mediaUrl,
   sortedMedia,
@@ -81,7 +81,7 @@ function MyListingsPage() {
           to="/sell"
           className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary-bright"
         >
-          <Plus className="size-4" /> Sell an item
+          <Plus className="size-4" /> Add a listing
         </Link>
       </div>
 
@@ -108,10 +108,10 @@ function MyListingsPage() {
                     <span className="text-xs text-muted-foreground">{new Date(l.created_at).toLocaleDateString()}</span>
                   </div>
                   <h2 className="mt-1.5 truncate text-sm font-semibold">{l.title}</h2>
-                  <p className="text-sm text-primary">{formatPrice(l.price_eur)}</p>
+                  <p className="text-sm text-primary">{priceLabel(l)}</p>
                   <div className="mt-auto flex flex-wrap gap-2 pt-3 text-xs font-semibold">
                     {(l.status === "published" || l.status === "sold") && (
-                      <Link to="/marketplace/$id" params={{ id: l.id }} className="rounded-full border border-input px-3 py-1.5 hover:border-primary-bright">
+                      <Link to={l.kind === "service" ? "/services/$id" : "/marketplace/$id"} params={{ id: l.id }} className="rounded-full border border-input px-3 py-1.5 hover:border-primary-bright">
                         View
                       </Link>
                     )}
@@ -122,7 +122,7 @@ function MyListingsPage() {
                         onClick={() => sold.mutate(l)}
                         className="rounded-full border border-input px-3 py-1.5 hover:border-primary-bright disabled:opacity-60"
                       >
-                        Mark as sold
+                        {l.kind === "service" ? "Mark unavailable" : "Mark as sold"}
                       </button>
                     )}
                     <button

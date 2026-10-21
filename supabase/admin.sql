@@ -99,9 +99,11 @@ begin
     if new.status is distinct from old.status and new.status not in ('pending', 'sold') then
       raise exception 'Only staff can publish or reject listings';
     end if;
-    if (new.title, new.description, new.price_eur, new.category, new.condition, new.city, new.seller_name)
+    if (new.kind, new.title, new.description, new.price_eur, new.price_unit, new.category,
+        new.condition, new.city, new.seller_name)
        is distinct from
-       (old.title, old.description, old.price_eur, old.category, old.condition, old.city, old.seller_name)
+       (old.kind, old.title, old.description, old.price_eur, old.price_unit, old.category,
+        old.condition, old.city, old.seller_name)
     then
       new.status := 'pending';
     end if;

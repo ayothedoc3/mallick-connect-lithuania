@@ -30,12 +30,12 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-1">
           {NAV.map((n) => (
             <Link
               key={n.to}
               to={n.to}
-              className="px-3 py-2 text-sm font-medium text-foreground/80 rounded-full hover:bg-secondary hover:text-primary transition"
+              className="whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-foreground/80 transition hover:bg-secondary hover:text-primary xl:px-3"
               activeProps={{ className: "bg-secondary text-primary" }}
               activeOptions={{ exact: n.to === "/" }}
             >
@@ -44,15 +44,17 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden shrink-0 items-center gap-2 whitespace-nowrap xl:flex">
           {user ? (
             <>
               <Link
                 to="/my-listings"
+                aria-label="My listings"
+                title="My listings"
                 className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-semibold text-primary hover:bg-secondary"
               >
                 <User className="size-4" />
-                <span className="hidden xl:inline">My listings</span>
+                <span className="hidden 2xl:inline">My listings</span>
               </Link>
               <Link to="/sell" className="rounded-full bg-accent px-3.5 py-2 text-sm font-bold text-accent-foreground hover:brightness-105">
                 Sell
@@ -64,7 +66,7 @@ export function Header() {
                 className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-semibold text-primary hover:bg-secondary"
               >
                 <LogOut className="size-4" />
-                <span className="hidden xl:inline">Sign out</span>
+                <span className="hidden 2xl:inline">Sign out</span>
               </button>
             </>
           ) : (
@@ -80,7 +82,7 @@ export function Header() {
 
         <button
           onClick={() => setOpen((o) => !o)}
-          className="lg:hidden grid size-10 place-items-center rounded-lg border border-border text-primary"
+          className="xl:hidden grid size-10 place-items-center rounded-lg border border-border text-primary"
           aria-label="Menu"
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -88,7 +90,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="lg:hidden border-t border-border bg-background">
+        <div className="xl:hidden border-t border-border bg-background">
           <div className="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-1">
             {NAV.map((n) => (
               <Link

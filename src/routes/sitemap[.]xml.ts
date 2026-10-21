@@ -27,8 +27,11 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/import-export", changefreq: "monthly", priority: "0.9" },
           { path: "/marketplace", changefreq: "daily", priority: "0.8" },
           { path: "/contact", changefreq: "monthly", priority: "0.8" },
-          ...(await fetchPublishedListings()).map((l) => ({
-            path: `/marketplace/${l.id}`,
+          ...[
+            ...(await fetchPublishedListings("item")),
+            ...(await fetchPublishedListings("service")),
+          ].map((l) => ({
+            path: `/${l.kind === "service" ? "services" : "marketplace"}/${l.id}`,
             lastmod: l.created_at.slice(0, 10),
             changefreq: "weekly" as const,
             priority: "0.6",

@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShortTermAccommodationRouteImport } from './routes/short-term-accommodation'
-import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as PreciousRouteImport } from './routes/precious'
 import { Route as MyListingsRouteImport } from './routes/my-listings'
@@ -24,7 +23,9 @@ import { Route as BuyingSellingRouteImport } from './routes/buying-selling'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AccommodationRouteImport } from './routes/accommodation'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as MarketplaceIndexRouteImport } from './routes/marketplace/index'
+import { Route as ServicesIdRouteImport } from './routes/services/$id'
 import { Route as MarketplaceIdRouteImport } from './routes/marketplace/$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -35,11 +36,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ShortTermAccommodationRoute = ShortTermAccommodationRouteImport.update({
   id: '/short-term-accommodation',
   path: '/short-term-accommodation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SellRoute = SellRouteImport.update({
@@ -102,9 +98,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketplaceIndexRoute = MarketplaceIndexRouteImport.update({
   id: '/marketplace/',
   path: '/marketplace/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesIdRoute = ServicesIdRouteImport.update({
+  id: '/services/$id',
+  path: '/services/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketplaceIdRoute = MarketplaceIdRouteImport.update({
@@ -126,11 +132,12 @@ export interface FileRoutesByFullPath {
   '/my-listings': typeof MyListingsRoute
   '/precious': typeof PreciousRoute
   '/sell': typeof SellRoute
-  '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
+  '/services/$id': typeof ServicesIdRoute
   '/marketplace/': typeof MarketplaceIndexRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -145,11 +152,12 @@ export interface FileRoutesByTo {
   '/my-listings': typeof MyListingsRoute
   '/precious': typeof PreciousRoute
   '/sell': typeof SellRoute
-  '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
+  '/services/$id': typeof ServicesIdRoute
   '/marketplace': typeof MarketplaceIndexRoute
+  '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -165,11 +173,12 @@ export interface FileRoutesById {
   '/my-listings': typeof MyListingsRoute
   '/precious': typeof PreciousRoute
   '/sell': typeof SellRoute
-  '/services': typeof ServicesRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
+  '/services/$id': typeof ServicesIdRoute
   '/marketplace/': typeof MarketplaceIndexRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -186,11 +195,12 @@ export interface FileRouteTypes {
     | '/my-listings'
     | '/precious'
     | '/sell'
-    | '/services'
     | '/short-term-accommodation'
     | '/sitemap.xml'
     | '/marketplace/$id'
+    | '/services/$id'
     | '/marketplace/'
+    | '/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -205,11 +215,12 @@ export interface FileRouteTypes {
     | '/my-listings'
     | '/precious'
     | '/sell'
-    | '/services'
     | '/short-term-accommodation'
     | '/sitemap.xml'
     | '/marketplace/$id'
+    | '/services/$id'
     | '/marketplace'
+    | '/services'
   id:
     | '__root__'
     | '/'
@@ -224,11 +235,12 @@ export interface FileRouteTypes {
     | '/my-listings'
     | '/precious'
     | '/sell'
-    | '/services'
     | '/short-term-accommodation'
     | '/sitemap.xml'
     | '/marketplace/$id'
+    | '/services/$id'
     | '/marketplace/'
+    | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,11 +256,12 @@ export interface RootRouteChildren {
   MyListingsRoute: typeof MyListingsRoute
   PreciousRoute: typeof PreciousRoute
   SellRoute: typeof SellRoute
-  ServicesRoute: typeof ServicesRoute
   ShortTermAccommodationRoute: typeof ShortTermAccommodationRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   MarketplaceIdRoute: typeof MarketplaceIdRoute
+  ServicesIdRoute: typeof ServicesIdRoute
   MarketplaceIndexRoute: typeof MarketplaceIndexRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -265,13 +278,6 @@ declare module '@tanstack/react-router' {
       path: '/short-term-accommodation'
       fullPath: '/short-term-accommodation'
       preLoaderRoute: typeof ShortTermAccommodationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sell': {
@@ -358,11 +364,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/marketplace/': {
       id: '/marketplace/'
       path: '/marketplace'
       fullPath: '/marketplace/'
       preLoaderRoute: typeof MarketplaceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/$id': {
+      id: '/services/$id'
+      path: '/services/$id'
+      fullPath: '/services/$id'
+      preLoaderRoute: typeof ServicesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/marketplace/$id': {
@@ -388,11 +408,12 @@ const rootRouteChildren: RootRouteChildren = {
   MyListingsRoute: MyListingsRoute,
   PreciousRoute: PreciousRoute,
   SellRoute: SellRoute,
-  ServicesRoute: ServicesRoute,
   ShortTermAccommodationRoute: ShortTermAccommodationRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   MarketplaceIdRoute: MarketplaceIdRoute,
+  ServicesIdRoute: ServicesIdRoute,
   MarketplaceIndexRoute: MarketplaceIndexRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

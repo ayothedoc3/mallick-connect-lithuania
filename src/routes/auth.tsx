@@ -4,12 +4,14 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { SetupNotice } from "@/components/SetupNotice";
+import type { ListingKind } from "@/lib/listings";
 
 type Redirect = "/sell" | "/my-listings";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { redirect?: Redirect } => ({
+  validateSearch: (s: Record<string, unknown>): { redirect?: Redirect; type?: ListingKind } => ({
     redirect: s.redirect === "/sell" || s.redirect === "/my-listings" ? s.redirect : undefined,
+    type: s.type === "service" ? "service" : s.type === "item" ? "item" : undefined,
   }),
   head: () => ({
     meta: [
@@ -24,7 +26,7 @@ const inputCls =
   "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20";
 
 function AuthPage() {
-  const { redirect } = Route.useSearch();
+  const { redirect, type } = Route.useSearch();
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -35,8 +37,8 @@ function AuthPage() {
   const target: Redirect = redirect ?? "/my-listings";
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: target });
-  }, [loading, user, navigate, target]);
+    if (!loading && user) navigate({ to: target, search: target === "/sell" ? { type } : {} });
+  }, [loading, user, navigate, target, type]);
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -51,7 +53,7 @@ function AuthPage() {
           password: form.password,
         });
         if (error) throw error;
-        navigate({ to: target });
+        navigate({ to: target, search: target === "/sell" ? { type } : {} });
       } else {
         const { data, error } = await supabase.auth.signUp({
           email: form.email.trim(),
@@ -63,7 +65,7 @@ function AuthPage() {
         });
         if (error) throw error;
         if (data.session) {
-          navigate({ to: target });
+          navigate({ to: target, search: target === "/sell" ? { type } : {} });
         } else {
           setCheckEmail(true);
         }

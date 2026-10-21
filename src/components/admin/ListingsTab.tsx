@@ -7,7 +7,7 @@ import {
   deleteListing,
   fetchAllListings,
   fetchProfiles,
-  formatPrice,
+  priceLabel,
   mediaUrl,
   setListingStatus,
   sortedMedia,
@@ -122,6 +122,9 @@ export function ListingsTab() {
                 <span className="text-muted-foreground">
                   {new Date(l.created_at).toLocaleString()}
                 </span>
+                <span className="rounded-full bg-primary px-2.5 py-1 font-semibold text-primary-foreground">
+                  {l.kind === "service" ? "Service" : "Item"}
+                </span>
                 <span className="text-muted-foreground">· {l.category}</span>
                 {l.condition && <span className="text-muted-foreground">· {l.condition}</span>}
                 {l.city && <span className="text-muted-foreground">· {l.city}</span>}
@@ -129,7 +132,7 @@ export function ListingsTab() {
               <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2">
                 <h2 className="font-display text-lg font-extrabold text-primary">{l.title}</h2>
                 <p className="font-display text-lg font-extrabold text-primary-bright">
-                  {formatPrice(l.price_eur)}
+                  {priceLabel(l)}
                 </p>
               </div>
               <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
@@ -213,7 +216,7 @@ export function ListingsTab() {
                     onClick={() => status.mutate({ id: l.id, to: "sold" })}
                     className={btn}
                   >
-                    Mark sold
+                    {l.kind === "service" ? "Mark unavailable" : "Mark sold"}
                   </button>
                 )}
                 {l.status !== "pending" && (
@@ -226,7 +229,7 @@ export function ListingsTab() {
                   </button>
                 )}
                 {(l.status === "published" || l.status === "sold") && (
-                  <Link to="/marketplace/$id" params={{ id: l.id }} className={btn}>
+                  <Link to={l.kind === "service" ? "/services/$id" : "/marketplace/$id"} params={{ id: l.id }} className={btn}>
                     View on site
                   </Link>
                 )}

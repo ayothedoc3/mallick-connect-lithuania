@@ -13,7 +13,30 @@ export const CATEGORIES = [
   "Other",
 ] as const;
 
+export const SERVICE_CATEGORIES = [
+  "Hair & braiding",
+  "Food & catering",
+  "Beauty & makeup",
+  "Photography & video",
+  "Events & DJ",
+  "Cleaning & home",
+  "Lessons & tutoring",
+  "Tailoring & fashion",
+  "Other",
+] as const;
+
 export const CONDITIONS = ["New", "Like new", "Good", "Fair"] as const;
+
+export type ListingKind = "item" | "service";
+
+/** What a service's starting price is charged per. */
+export const PRICE_UNITS = {
+  hour: "per hour",
+  session: "per session",
+  person: "per person",
+  job: "per job",
+} as const;
+export type PriceUnit = keyof typeof PRICE_UNITS;
 
 // Keep these in sync with supabase/schema.sql (bucket limits + triggers).
 export const LIMITS = {
@@ -48,9 +71,11 @@ export interface ListingMedia {
 export interface Listing {
   id: string;
   user_id: string;
+  kind: ListingKind;
   title: string;
   description: string;
   price_eur: number | null;
+  price_unit: PriceUnit | null;
   category: string;
   condition: string | null;
   city: string | null;
@@ -77,10 +102,17 @@ export function formatPrice(p: number | null) {
   }).format(p);
 }
 
-export async function fetchPublishedListings(limit = 60): Promise<Listing[]> {
+/** "€500" for items; "From €40 per session" for services. */
+export function priceLabel(l: Pick<Listing, "kind" | "price_eur" | "price_unit">) {
+  if (l.kind === "item" || l.price_eur === null) return formatPrice(l.price_eur);
+  return `From ${formatPrice(l.price_eur)}${l.price_unit ? ` ${PRICE_UNITS[l.price_unit]}` : ""}`;
+}
+
+export async function fetchPublishedListings(kind: ListingKind, limit = 60): Promise<Listing[]> {
   const { data, error } = await supabase
     .from("listings")
     .select("*, listing_media(*)")
+    .eq("kind", kind)
     .eq("status", "published")
     .order("created_at", { ascending: false })
     .limit(limit);
@@ -123,11 +155,13 @@ export async function deleteListing(listing: Listing) {
 }
 
 export interface NewListingInput {
+  kind: ListingKind;
   userId: string;
   sellerName: string;
   title: string;
   description: string;
   priceEur: number | null;
+  priceUnit: PriceUnit | null;
   category: string;
   condition: string;
   city: string;
@@ -160,11 +194,13 @@ export async function createListing(
   const { data: created, error } = await supabase
     .from("listings")
     .insert({
+      kind: input.kind,
       user_id: input.userId,
       seller_name: input.sellerName || null,
       title: input.title,
       description: input.description,
       price_eur: input.priceEur,
+      price_unit: input.priceUnit,
       category: input.category,
       condition: input.condition || null,
       city: input.city || null,

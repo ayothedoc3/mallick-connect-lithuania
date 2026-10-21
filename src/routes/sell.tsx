@@ -6,12 +6,26 @@ import { toast } from "sonner";
 import { PageHero } from "@/components/PageHero";
 import { SetupNotice } from "@/components/SetupNotice";
 import { useAuth } from "@/lib/auth";
-import { CATEGORIES, CONDITIONS, LIMITS, createListing, validateFiles } from "@/lib/listings";
+import {
+  CATEGORIES,
+  CONDITIONS,
+  LIMITS,
+  PRICE_UNITS,
+  SERVICE_CATEGORIES,
+  createListing,
+  validateFiles,
+  type ListingKind,
+  type PriceUnit,
+} from "@/lib/listings";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/sell")({
+  validateSearch: (s: Record<string, unknown>): { type?: ListingKind } => ({
+    type: s.type === "service" ? "service" : s.type === "item" ? "item" : undefined,
+  }),
   head: () => ({
     meta: [
-      { title: "Sell an item | Mallick Assist Service" },
+      { title: "Sell an item or offer a service | Mallick Assist Service" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -21,27 +35,65 @@ export const Route = createFileRoute("/sell")({
 const inputCls =
   "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20";
 
+const COPY = {
+  item: {
+    eyebrow: "Marketplace",
+    heading: "Sell an item",
+    subtitle: "Add photos, an optional video and a description. We review every listing before it goes live.",
+    title: "Title *",
+    titleHint: "e.g. IKEA desk, white, 120 cm",
+    categories: CATEGORIES,
+    price: "Price (EUR)",
+    city: "City",
+    cityHint: "Vilnius, Kaunas…",
+    description: "Size, age, any damage, why you're selling, pickup details…",
+    photos: "Photos *",
+  },
+  service: {
+    eyebrow: "Services",
+    heading: "Offer your service",
+    subtitle:
+      "Braiding, cooking, photography or anything else you do. Show your work with photos and a short video. We review every listing before it goes live.",
+    title: "Service name *",
+    titleHint: "e.g. Knotless braids, any length",
+    categories: SERVICE_CATEGORIES,
+    price: "Starting price (EUR)",
+    city: "Where you work",
+    cityHint: "e.g. Vilnius, or I come to you",
+    description: "What's included, how long it takes, where you work, when you're available…",
+    photos: "Photos of your work *",
+  },
+} as const;
+
 function SellPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const kind = Route.useSearch().type ?? "item";
+  const copy = COPY[kind];
 
   const [form, setForm] = useState({
     title: "",
     category: "",
     condition: "",
     price: "",
+    priceUnit: "" as PriceUnit | "",
     city: "",
     description: "",
   });
+
+  function chooseKind(next: ListingKind) {
+    setForm((f) => ({ ...f, category: "", condition: "", priceUnit: "" }));
+    navigate({ to: "/sell", search: { type: next }, replace: true });
+  }
   const [images, setImages] = useState<File[]>([]);
   const [videos, setVideos] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth", search: { redirect: "/sell" } });
-  }, [loading, user, navigate]);
+    if (!loading && !user) navigate({ to: "/auth", search: { redirect: "/sell", type: kind } });
+  }, [loading, user, navigate, kind]);
 
   const imagePreviews = useMemo(() => images.map((f) => URL.createObjectURL(f)), [images]);
   useEffect(() => () => imagePreviews.forEach((u) => URL.revokeObjectURL(u)), [imagePreviews]);
@@ -89,13 +141,15 @@ function SellPage() {
     try {
       await createListing(
         {
+          kind,
           userId: user.id,
           sellerName: (user.user_metadata?.display_name as string | undefined) ?? "",
           title: form.title.trim(),
           description: form.description.trim(),
           priceEur: price,
+          priceUnit: kind === "service" && form.priceUnit ? form.priceUnit : null,
           category: form.category,
-          condition: form.condition,
+          condition: kind === "item" ? form.condition : "",
           city: form.city.trim(),
           images,
           videos,
@@ -119,17 +173,33 @@ function SellPage() {
 
   return (
     <>
-      <PageHero
-        eyebrow="Marketplace"
-        title={<>Sell an item</>}
-        subtitle="Add photos, an optional video and a description. We review every listing before it goes live."
-      />
+      <PageHero eyebrow={copy.eyebrow} title={copy.heading} subtitle={copy.subtitle} />
       <section className="mx-auto max-w-3xl px-4 sm:px-6 py-12">
         <SetupNotice />
         <form onSubmit={onSubmit} className="rounded-3xl bg-card p-6 sm:p-8 shadow-card border border-border grid gap-5">
+          <fieldset>
+            <legend className="mb-1.5 block text-sm font-semibold text-primary">What are you listing?</legend>
+            <div className="grid grid-cols-2 gap-2 rounded-full bg-secondary p-1">
+              {(["item", "service"] as const).map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => chooseKind(k)}
+                  aria-pressed={kind === k}
+                  className={cn(
+                    "rounded-full px-4 py-2.5 text-sm font-semibold transition",
+                    kind === k ? "bg-primary text-primary-foreground shadow-soft" : "text-primary hover:bg-background/60",
+                  )}
+                >
+                  {k === "item" ? "An item to sell" : "A service I offer"}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
           <label className="block">
-            <span className="mb-1.5 block text-sm font-semibold text-primary">Title *</span>
-            <input required minLength={3} maxLength={120} value={form.title} onChange={set("title")} className={inputCls} placeholder="e.g. IKEA desk, white, 120 cm" />
+            <span className="mb-1.5 block text-sm font-semibold text-primary">{copy.title}</span>
+            <input required minLength={3} maxLength={120} value={form.title} onChange={set("title")} className={inputCls} placeholder={copy.titleHint} />
           </label>
 
           <div className="grid gap-5 sm:grid-cols-2">
@@ -137,38 +207,59 @@ function SellPage() {
               <span className="mb-1.5 block text-sm font-semibold text-primary">Category *</span>
               <select required value={form.category} onChange={set("category")} className={inputCls}>
                 <option value="">Select…</option>
-                {CATEGORIES.map((c) => (
+                {copy.categories.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             </label>
+            {kind === "item" && (
+              <label className="block">
+                <span className="mb-1.5 block text-sm font-semibold text-primary">Condition</span>
+                <select value={form.condition} onChange={set("condition")} className={inputCls}>
+                  <option value="">Select…</option>
+                  {CONDITIONS.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {kind === "service" && (
+              <label className="block">
+                <span className="mb-1.5 block text-sm font-semibold text-primary">{copy.city}</span>
+                <input maxLength={60} value={form.city} onChange={set("city")} className={inputCls} placeholder={copy.cityHint} />
+              </label>
+            )}
             <label className="block">
-              <span className="mb-1.5 block text-sm font-semibold text-primary">Condition</span>
-              <select value={form.condition} onChange={set("condition")} className={inputCls}>
-                <option value="">Select…</option>
-                {CONDITIONS.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </label>
-            <label className="block">
-              <span className="mb-1.5 block text-sm font-semibold text-primary">Price (EUR)</span>
+              <span className="mb-1.5 block text-sm font-semibold text-primary">{copy.price}</span>
               <input inputMode="decimal" value={form.price} onChange={set("price")} className={inputCls} placeholder="Leave empty for price on request" />
             </label>
-            <label className="block">
-              <span className="mb-1.5 block text-sm font-semibold text-primary">City</span>
-              <input maxLength={60} value={form.city} onChange={set("city")} className={inputCls} placeholder="Vilnius, Kaunas…" />
-            </label>
+            {kind === "service" && (
+              <label className="block">
+                <span className="mb-1.5 block text-sm font-semibold text-primary">Price is charged</span>
+                <select value={form.priceUnit} onChange={set("priceUnit")} className={inputCls}>
+                  <option value="">Select…</option>
+                  {Object.entries(PRICE_UNITS).map(([k, label]) => (
+                    <option key={k} value={k}>{label}</option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {kind === "item" && (
+              <label className="block">
+                <span className="mb-1.5 block text-sm font-semibold text-primary">{copy.city}</span>
+                <input maxLength={60} value={form.city} onChange={set("city")} className={inputCls} placeholder={copy.cityHint} />
+              </label>
+            )}
           </div>
 
           <label className="block">
             <span className="mb-1.5 block text-sm font-semibold text-primary">Description *</span>
-            <textarea required minLength={10} maxLength={5000} rows={6} value={form.description} onChange={set("description")} className={inputCls} placeholder="Size, age, any damage, why you're selling, pickup details…" />
+            <textarea required minLength={10} maxLength={5000} rows={6} value={form.description} onChange={set("description")} className={inputCls} placeholder={copy.description} />
           </label>
 
           <div>
             <span className="mb-1.5 block text-sm font-semibold text-primary">
-              Photos * <span className="font-normal normal-case text-muted-foreground">(up to {LIMITS.maxImages}, 10 MB each)</span>
+              {copy.photos} <span className="font-normal normal-case text-muted-foreground">(up to {LIMITS.maxImages}, 10 MB each)</span>
             </span>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {images.map((f, i) => (

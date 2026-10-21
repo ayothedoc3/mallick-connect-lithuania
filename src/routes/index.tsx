@@ -35,9 +35,11 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  loader: () => fetchPublishedListings(4),
+  loader: () => fetchPublishedListings("item", 4),
   component: Home,
 });
+
+const TONES = ["navy", "blue", "yellow", "blue", "light", "navy"] as const;
 
 const SERVICE_LINKS = [
   { to: "/short-term-accommodation", label: "Short stays" },
@@ -132,10 +134,20 @@ function Home() {
           </p>
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s) => (
-            <ServiceCard key={s.slug} title={s.title} description={s.short} icon={s.icon} href={`/${s.slug}`} />
+          {SERVICES.map((s, i) => (
+            <ServiceCard key={s.slug} title={s.title} description={s.short} icon={s.icon} tone={TONES[i]} href={`/${s.slug}`} />
           ))}
         </div>
+        <p className="mt-8 text-muted-foreground">
+          Looking for a braider, chef or photographer?{" "}
+          <Link
+            to="/services"
+            hash="local-pros"
+            className="font-semibold text-primary underline decoration-border underline-offset-4 hover:decoration-primary"
+          >
+            Find a local pro in Vilnius
+          </Link>
+        </p>
       </section>
 
       {/* MARKETPLACE */}
