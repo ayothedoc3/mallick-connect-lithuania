@@ -32,7 +32,7 @@ export function Footer() {
             <li><Link to="/buying-selling" className="hover:text-accent">Buying & Selling</Link></li>
             <li><Link to="/marketplace" className="hover:text-accent">Marketplace</Link></li>
             <li><Link to="/import-export" className="hover:text-accent">Import & Export</Link></li>
-            <li><Link to="/services" className="hover:text-accent">All Services</Link></li>
+            <li><Link to="/services" className="hover:text-accent">Local pros</Link></li>
           </ul>
         </div>
 
