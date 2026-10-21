@@ -10,23 +10,21 @@ interface Props {
   title?: string;
 }
 
-export function ServiceRequestForm({ defaultService = "", title = "Request a Service" }: Props) {
+export function ServiceRequestForm({ defaultService = "", title = "Request a service" }: Props) {
   const site = useSiteSettings();
   const waLink = useWaLink();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: "",
     whatsapp: "",
-    email: "",
     service: defaultService,
-    city: "",
-    budget: "",
-    date: "",
     message: "",
   });
 
-  const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
+  const update =
+    (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [k]: e.target.value }));
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -35,11 +33,7 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
       ``,
       `*Name:* ${form.name}`,
       `*WhatsApp:* ${form.whatsapp}`,
-      `*Email:* ${form.email}`,
       `*Service:* ${form.service}`,
-      `*City:* ${form.city}`,
-      `*Budget:* ${form.budget}`,
-      `*Preferred date:* ${form.date}`,
       ``,
       `*Message:*`,
       form.message,
@@ -60,7 +54,7 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
     <div className="rounded-3xl bg-card p-6 sm:p-8 shadow-card border border-border">
       <h3 className="font-display text-2xl font-extrabold text-primary">{title}</h3>
       <p className="mt-1.5 text-sm text-muted-foreground">
-        Fill out the form and we'll continue the conversation on WhatsApp.
+        We'll open WhatsApp with your details filled in, so we can reply straight away.
       </p>
 
       {submitted ? (
@@ -73,30 +67,32 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
       ) : (
         <form onSubmit={handleSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
           <Field label="Full name" required>
-            <input required value={form.name} onChange={update("name")} className={inputCls} placeholder="Your name" />
+            <input
+              required
+              value={form.name}
+              onChange={update("name")}
+              className={inputCls}
+              placeholder="Your name"
+            />
           </Field>
           <Field label="WhatsApp number" required>
-            <input required value={form.whatsapp} onChange={update("whatsapp")} className={inputCls} placeholder="+370…" />
+            <input
+              required
+              value={form.whatsapp}
+              onChange={update("whatsapp")}
+              className={inputCls}
+              placeholder="+370…"
+            />
           </Field>
-          <Field label="Email">
-            <input type="email" value={form.email} onChange={update("email")} className={inputCls} placeholder="you@email.com" />
-          </Field>
-          <Field label="Service" required>
+          <Field label="Service" required className="sm:col-span-2">
             <select required value={form.service} onChange={update("service")} className={inputCls}>
               <option value="">Select a service…</option>
               {SERVICES.map((s) => (
-                <option key={s.slug} value={s.title}>{s.title}</option>
+                <option key={s.slug} value={s.title}>
+                  {s.title}
+                </option>
               ))}
             </select>
-          </Field>
-          <Field label="City">
-            <input value={form.city} onChange={update("city")} className={inputCls} placeholder="Vilnius, Kaunas…" />
-          </Field>
-          <Field label="Budget (EUR)">
-            <input value={form.budget} onChange={update("budget")} className={inputCls} placeholder="e.g. 300" />
-          </Field>
-          <Field label="Preferred date" className="sm:col-span-2">
-            <input type="date" value={form.date} onChange={update("date")} className={inputCls} />
           </Field>
           <Field label="Message" className="sm:col-span-2">
             <textarea
@@ -104,7 +100,7 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
               value={form.message}
               onChange={update("message")}
               className={inputCls}
-              placeholder="Tell us what you need…"
+              placeholder="What do you need, where and when? A budget helps too."
             />
           </Field>
           <div className="sm:col-span-2 flex flex-col sm:flex-row gap-3">
@@ -112,7 +108,7 @@ export function ServiceRequestForm({ defaultService = "", title = "Request a Ser
               type="submit"
               className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground hover:bg-primary-bright transition shadow-soft"
             >
-              <Send className="size-4" /> Send Request
+              <Send className="size-4" /> Send on WhatsApp
             </button>
           </div>
         </form>
@@ -134,7 +130,7 @@ function Field({
 }) {
   return (
     <label className={`block ${className}`}>
-      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">
+      <span className="mb-1.5 block text-sm font-semibold text-primary">
         {label} {required && <span className="text-destructive">*</span>}
       </span>
       {children}

@@ -121,20 +121,20 @@ function SellPage() {
     <>
       <PageHero
         eyebrow="Marketplace"
-        title={<>Sell an <span className="text-accent">item</span></>}
+        title={<>Sell an item</>}
         subtitle="Add photos, an optional video and a description. We review every listing before it goes live."
       />
       <section className="mx-auto max-w-3xl px-4 sm:px-6 py-12">
         <SetupNotice />
         <form onSubmit={onSubmit} className="rounded-3xl bg-card p-6 sm:p-8 shadow-card border border-border grid gap-5">
           <label className="block">
-            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Title *</span>
+            <span className="mb-1.5 block text-sm font-semibold text-primary">Title *</span>
             <input required minLength={3} maxLength={120} value={form.title} onChange={set("title")} className={inputCls} placeholder="e.g. IKEA desk, white, 120 cm" />
           </label>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Category *</span>
+              <span className="mb-1.5 block text-sm font-semibold text-primary">Category *</span>
               <select required value={form.category} onChange={set("category")} className={inputCls}>
                 <option value="">Select…</option>
                 {CATEGORIES.map((c) => (
@@ -143,7 +143,7 @@ function SellPage() {
               </select>
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Condition</span>
+              <span className="mb-1.5 block text-sm font-semibold text-primary">Condition</span>
               <select value={form.condition} onChange={set("condition")} className={inputCls}>
                 <option value="">Select…</option>
                 {CONDITIONS.map((c) => (
@@ -152,22 +152,22 @@ function SellPage() {
               </select>
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Price (EUR)</span>
+              <span className="mb-1.5 block text-sm font-semibold text-primary">Price (EUR)</span>
               <input inputMode="decimal" value={form.price} onChange={set("price")} className={inputCls} placeholder="Leave empty for price on request" />
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">City</span>
+              <span className="mb-1.5 block text-sm font-semibold text-primary">City</span>
               <input maxLength={60} value={form.city} onChange={set("city")} className={inputCls} placeholder="Vilnius, Kaunas…" />
             </label>
           </div>
 
           <label className="block">
-            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Description *</span>
+            <span className="mb-1.5 block text-sm font-semibold text-primary">Description *</span>
             <textarea required minLength={10} maxLength={5000} rows={6} value={form.description} onChange={set("description")} className={inputCls} placeholder="Size, age, any damage, why you're selling, pickup details…" />
           </label>
 
           <div>
-            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">
+            <span className="mb-1.5 block text-sm font-semibold text-primary">
               Photos * <span className="font-normal normal-case text-muted-foreground">(up to {LIMITS.maxImages}, 10 MB each)</span>
             </span>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -205,7 +205,7 @@ function SellPage() {
           </div>
 
           <div>
-            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">
+            <span className="mb-1.5 block text-sm font-semibold text-primary">
               Videos <span className="font-normal normal-case text-muted-foreground">(optional, up to {LIMITS.maxVideos}, 50 MB each)</span>
             </span>
             <ul className="space-y-2">

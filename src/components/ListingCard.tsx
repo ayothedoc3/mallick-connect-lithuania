@@ -31,7 +31,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
         )}
       </div>
       <div className="p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{listing.category}</p>
+        <p className="text-xs font-semibold text-muted-foreground">{listing.category}</p>
         <h3 className="mt-1 line-clamp-2 font-display text-base font-extrabold leading-tight text-primary">
           {listing.title}
         </h3>

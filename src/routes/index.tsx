@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Sparkles, Clock, HeartHandshake, MapPin, ArrowRight, Quote, MessageSquare, ClipboardList, Compass, ShoppingBag, Tag } from "lucide-react";
+import { Sparkles, Clock, HeartHandshake, MapPin, Quote, ShoppingBag, Tag } from "lucide-react";
 import { ServiceCard } from "@/components/ServiceCard";
 import { ListingCard } from "@/components/ListingCard";
 import { FounderVideo } from "@/components/FounderVideo";
@@ -39,7 +39,34 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const TONES = ["navy", "blue", "yellow", "blue", "light", "navy"] as const;
+const SERVICE_LINKS = [
+  { to: "/short-term-accommodation", label: "Short stays" },
+  { to: "/long-term-accommodation", label: "Long-term housing" },
+  { to: "/hall-rentals", label: "Event halls" },
+  { to: "/currency-exchange", label: "Currency exchange" },
+  { to: "/import-export", label: "Import & export" },
+] as const;
+
+const STEPS = [
+  { title: "Tell us what you need", text: "Send a WhatsApp message or fill in the short form below." },
+  { title: "We confirm options", text: "We check availability and send you trusted options to choose from." },
+  { title: "We stay with you", text: "We're with you from the first message until everything is settled." },
+];
+
+const REASONS = [
+  { icon: HeartHandshake, t: "Trusted by community", d: "Recommended across diaspora networks." },
+  { icon: MapPin, t: "Local Lithuania support", d: "On-the-ground knowledge in every city." },
+  { icon: Clock, t: "Fast response", d: "Most WhatsApp messages answered within minutes." },
+  { icon: Sparkles, t: "Diaspora-friendly", d: "We speak your language, literally and figuratively." },
+];
+
+const TESTIMONIALS = [
+  { q: "They found me a great short-stay in Vilnius the same day I arrived. I felt cared for from minute one.", n: "Amaka O.", r: "New arrival, Vilnius" },
+  { q: "Organized our wedding hall, decorations, and even helped with the currency exchange. One contact for everything.", n: "Ravi & Priya", r: "Wedding, Kaunas" },
+  { q: "Shipped a container back home without stress. They handled paperwork I had no idea about.", n: "Samuel K.", r: "Import/Export client" },
+];
+
+const h2 = "font-display text-3xl sm:text-4xl font-extrabold text-primary";
 
 function Home() {
   const site = useSiteSettings();
@@ -49,53 +76,48 @@ function Home() {
       {/* HERO */}
       <section className="bg-hero relative overflow-hidden text-primary-foreground">
         <div className="absolute inset-0 bg-grid-soft opacity-20" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-24 lg:py-28 grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20 lg:py-24 grid lg:grid-cols-[1.25fr_1fr] gap-12 items-center">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 text-xs font-bold uppercase tracking-wider text-accent-foreground">
-              <MapPin className="size-3.5" /> Based in Lithuania
-            </span>
-            <h1 className="mt-5 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05]">
-              Trusted support services for{" "}
-              <span className="text-accent">accommodation, events, exchange</span>{" "}
-              and shipping in Lithuania
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.02]">
+              Your trusted contact in Lithuania
             </h1>
-            <p className="mt-6 max-w-xl text-base sm:text-lg text-primary-foreground/85">
-              Mallick Assist Service helps people settle, move, trade and organize events,
-              all through one trusted contact.
+            <p className="mt-6 max-w-xl text-lg text-primary-foreground/85">
+              Housing, event halls, currency exchange and shipping for students, families and the
+              diaspora. Message us on WhatsApp and we'll handle the rest.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-accent-foreground hover:brightness-105 shadow-soft"
-              >
-                Request a Service <ArrowRight className="size-4" />
-              </Link>
+              <WhatsAppButton size="lg" />
               <Link
                 to="/marketplace"
-                className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 px-6 py-3.5 text-sm font-bold hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 px-6 py-3.5 text-base font-semibold hover:bg-white/10"
               >
-                <ShoppingBag className="size-4" /> Browse Marketplace
+                <ShoppingBag className="size-4" /> Browse the marketplace
               </Link>
-              <WhatsAppButton size="lg" />
             </div>
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-primary-foreground/80">
-              {["Fast WhatsApp response", "Local Lithuania support", "Diaspora-friendly"].map((t) => (
-                <span key={t} className="inline-flex items-center gap-1.5"><Check className="size-4 text-accent" />{t}</span>
+            <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              {SERVICE_LINKS.map((l) => (
+                <li key={l.to}>
+                  <Link
+                    to={l.to}
+                    className="text-primary-foreground/80 underline decoration-white/30 underline-offset-4 hover:text-accent hover:decoration-accent"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
-          {/* Founder video */}
           <figure className="relative mx-auto w-full max-w-[300px] lg:mr-0 lg:max-w-[340px]">
             <div className="absolute -top-6 -right-6 size-56 rounded-full bg-accent/30 blur-3xl" />
             <FounderVideo
               video="mission"
               preview
-              label="Our founder on helping African students settle into Vilnius"
+              label="Precious, our founder, on helping African students settle into Vilnius"
               className="relative"
             />
             <figcaption className="relative mt-4 text-center text-sm text-primary-foreground/80">
-              Our founder on helping students settle into Vilnius
+              Precious, our founder, on helping students settle into Vilnius
             </figcaption>
           </figure>
         </div>
@@ -104,45 +126,28 @@ function Home() {
       {/* SERVICES */}
       <section id="services" className="mx-auto max-w-7xl px-4 sm:px-6 py-20">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-primary-bright">What we do</span>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-primary">
-              Six services. One trusted contact.
-            </h2>
-          </div>
+          <h2 className={h2}>Six services. One trusted contact.</h2>
           <p className="max-w-md text-muted-foreground">
             From your first night in Lithuania to shipping goods home. We handle the details so you don't have to.
           </p>
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <ServiceCard
-              key={s.slug}
-              title={s.title}
-              description={s.short}
-              icon={s.icon}
-              tone={TONES[i]}
-              href={`/${s.slug}`}
-            />
+          {SERVICES.map((s) => (
+            <ServiceCard key={s.slug} title={s.title} description={s.short} icon={s.icon} href={`/${s.slug}`} />
           ))}
         </div>
       </section>
 
       {/* MARKETPLACE */}
       <section className="bg-primary py-20 text-primary-foreground">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-accent">Marketplace</span>
-              <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold">
-                Buy and sell with our community
-              </h2>
-              <p className="mt-3 max-w-xl text-primary-foreground/80">
-                Furniture, electronics, kitchen items and more from people across Lithuania.
-                Listing is free: add photos, a price and you're done.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-center lg:gap-14">
+          <div>
+            <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Buy and sell with our community</h2>
+            <p className="mt-3 max-w-md text-primary-foreground/80">
+              Furniture, electronics, kitchen items and more from people across Lithuania.
+              Listing is free: add photos, a price and you're done.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 to="/marketplace"
                 className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-accent-foreground shadow-soft hover:brightness-105"
@@ -157,18 +162,18 @@ function Home() {
               </Link>
             </div>
           </div>
-
           {latest.length > 0 ? (
-            <div className="mt-10 grid gap-5 text-foreground sm:grid-cols-2 lg:grid-cols-4">
+            <ul className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 text-foreground sm:mx-0 sm:px-0">
               {latest.map((l) => (
-                <ListingCard key={l.id} listing={l} />
+                <li key={l.id} className="w-60 shrink-0 snap-start">
+                  <ListingCard listing={l} />
+                </li>
               ))}
-            </div>
+            </ul>
           ) : (
-            <div className="mt-10 rounded-3xl border border-white/15 bg-white/5 p-10 text-center">
-              <p className="font-display text-xl font-extrabold">No items listed yet</p>
-              <p className="mt-2 text-sm text-primary-foreground/75">Be the first to sell something.</p>
-            </div>
+            <p className="rounded-3xl border border-white/15 p-10 text-center text-primary-foreground/75">
+              No items listed yet. Be the first to sell something.
+            </p>
           )}
         </div>
       </section>
@@ -176,49 +181,29 @@ function Home() {
       {/* HOW IT WORKS */}
       <section className="bg-secondary/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-primary-bright">How it works</span>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-primary">
-              Three simple steps
-            </h2>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {[
-              { icon: MessageSquare, title: "Tell us what you need", text: "Send a quick message on WhatsApp or fill out the form." },
-              { icon: ClipboardList, title: "We confirm options", text: "We check availability and send you trusted options to pick from." },
-              { icon: HeartHandshake, title: "Support start to finish", text: "We stay with you until everything is settled and you're happy." },
-            ].map((s, i) => (
-              <div key={s.title} className="relative rounded-3xl bg-card p-7 shadow-soft border border-border">
-                <span className="absolute -top-4 -left-4 grid size-12 place-items-center rounded-2xl bg-accent text-accent-foreground font-display font-extrabold text-lg">
-                  0{i + 1}
-                </span>
-                <s.icon className="size-8 text-primary-bright" strokeWidth={2.2} />
-                <h3 className="mt-4 font-display text-xl font-extrabold text-primary">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
-              </div>
+          <h2 className={h2}>How it works</h2>
+          <ol className="mt-10 grid gap-10 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <li key={s.title} className="border-t-2 border-primary pt-5">
+                <span className="font-display text-sm font-extrabold text-primary-bright">Step {i + 1}</span>
+                <h3 className="mt-1 font-display text-xl font-extrabold text-primary">{s.title}</h3>
+                <p className="mt-2 text-muted-foreground">{s.text}</p>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
       {/* WHY CHOOSE US */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20 grid lg:grid-cols-[1.4fr_1fr] gap-12 items-center">
         <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-primary-bright">Why choose us</span>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-primary">
-            Built on trust. Powered by community.
-          </h2>
+          <h2 className={h2}>Built on trust. Powered by community.</h2>
           <p className="mt-4 max-w-xl text-muted-foreground">
             We're not a faceless agency. We're part of the diaspora community in Lithuania,
             and we treat every request like it's for family.
           </p>
           <ul className="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2">
-            {[
-              { icon: HeartHandshake, t: "Trusted by community", d: "Recommended across diaspora networks." },
-              { icon: MapPin, t: "Local Lithuania support", d: "On-the-ground knowledge in every city." },
-              { icon: Clock, t: "Fast response", d: "Most WhatsApp messages answered within minutes." },
-              { icon: Sparkles, t: "Diaspora-friendly", d: "We speak your language, literally and figuratively." },
-            ].map((f) => (
+            {REASONS.map((f) => (
               <li key={f.t} className="flex gap-3">
                 <f.icon className="mt-0.5 size-6 shrink-0 rounded-lg bg-accent p-1 text-accent-foreground" />
                 <div>
@@ -239,9 +224,9 @@ function Home() {
           </dl>
         </div>
         <figure className="mx-auto w-full max-w-[320px]">
-          <FounderVideo video="intro" label="A message from our founder" />
+          <FounderVideo video="intro" label="A message from Precious, our founder" />
           <figcaption className="mt-4 text-center text-sm text-muted-foreground">
-            A message from our founder
+            A message from Precious, our founder
           </figcaption>
         </figure>
       </section>
@@ -249,29 +234,15 @@ function Home() {
       {/* TESTIMONIALS */}
       <section className="bg-secondary/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-primary-bright">Testimonials</span>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-primary">
-              What our community says
-            </h2>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {[
-              { q: "They found me a great short-stay in Vilnius the same day I arrived. I felt cared for from minute one.", n: "Amaka O.", r: "New arrival, Vilnius" },
-              { q: "Organized our wedding hall, decorations, and even helped with the currency exchange. One contact for everything.", n: "Ravi & Priya", r: "Wedding, Kaunas" },
-              { q: "Shipped a container back home without stress. They handled paperwork I had no idea about.", n: "Samuel K.", r: "Import/Export client" },
-            ].map((t) => (
-              <figure key={t.n} className="rounded-3xl bg-card p-7 border border-border shadow-soft">
+          <h2 className={h2}>What our community says</h2>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {TESTIMONIALS.map((t) => (
+              <figure key={t.n} className="rounded-3xl bg-card p-7 border border-border">
                 <Quote className="size-7 text-accent" />
                 <blockquote className="mt-3 text-foreground/90">"{t.q}"</blockquote>
-                <figcaption className="mt-5 flex items-center gap-3">
-                  <div className="grid size-11 place-items-center rounded-full bg-primary text-primary-foreground font-display font-extrabold">
-                    {t.n[0]}
-                  </div>
-                  <div>
-                    <div className="font-bold text-primary">{t.n}</div>
-                    <div className="text-xs text-muted-foreground">{t.r}</div>
-                  </div>
+                <figcaption className="mt-5">
+                  <div className="font-bold text-primary">{t.n}</div>
+                  <div className="text-sm text-muted-foreground">{t.r}</div>
                 </figcaption>
               </figure>
             ))}
@@ -282,21 +253,15 @@ function Home() {
       {/* CONTACT */}
       <section id="contact" className="mx-auto max-w-7xl px-4 sm:px-6 py-20 grid lg:grid-cols-[1fr_1.1fr] gap-10 items-start">
         <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-primary-bright">Contact us</span>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-primary">
-            Let's talk about what you need
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Send a WhatsApp message, give us a call, or fill out the form. We respond fast and we never spam.
+          <h2 className={h2}>Let's talk about what you need</h2>
+          <p className="mt-4 max-w-md text-muted-foreground">
+            Send a WhatsApp message, give us a call, or fill in the form. We respond fast and we never spam.
           </p>
-          <div className="mt-8 space-y-4">
-            <ContactRow label="WhatsApp & Calls" value={site.phone_display} href={`tel:${site.phone}`} />
+          <dl className="mt-8 grid gap-5">
+            <ContactRow label="WhatsApp and calls" value={site.phone_display} href={`tel:${site.phone}`} />
             <ContactRow label="Based in" value={site.city} />
             <ContactRow label="TikTok" value={site.tiktok_handle} href={site.tiktok_url} />
-          </div>
-          <div className="mt-8">
-            <WhatsAppButton size="lg" />
-          </div>
+          </dl>
         </div>
         <ServiceRequestForm />
       </section>
@@ -305,14 +270,18 @@ function Home() {
 }
 
 function ContactRow({ label, value, href }: { label: string; value: string; href?: string }) {
-  const inner = (
-    <div className="rounded-2xl border border-border bg-card p-4 flex items-center justify-between gap-4 hover:border-primary-bright transition">
-      <div>
-        <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{label}</div>
-        <div className="mt-0.5 font-display font-extrabold text-primary">{value}</div>
-      </div>
-      {href && <ArrowRight className="size-4 text-primary-bright shrink-0" />}
+  return (
+    <div>
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="mt-0.5 font-display text-xl font-extrabold text-primary">
+        {href ? (
+          <a href={href} className="underline decoration-border underline-offset-4 hover:decoration-primary-bright">
+            {value}
+          </a>
+        ) : (
+          value
+        )}
+      </dd>
     </div>
   );
-  return href ? <a href={href}>{inner}</a> : inner;
 }

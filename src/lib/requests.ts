@@ -19,11 +19,7 @@ export interface ServiceRequest {
 export interface ServiceRequestInput {
   name: string;
   whatsapp: string;
-  email: string;
   service: string;
-  city: string;
-  budget: string;
-  date: string;
   message: string;
 }
 
@@ -33,11 +29,7 @@ export async function submitServiceRequest(f: ServiceRequestInput) {
   const { error } = await supabase.from("service_requests").insert({
     name: f.name.trim(),
     whatsapp: f.whatsapp.trim(),
-    email: blankToNull(f.email),
     service: f.service,
-    city: blankToNull(f.city),
-    budget: blankToNull(f.budget),
-    preferred_date: blankToNull(f.date),
     message: blankToNull(f.message),
   });
   if (error) throw error;

@@ -46,7 +46,7 @@ function MarketplacePage() {
     <>
       <PageHero
         eyebrow="Marketplace"
-        title={<>Buy and sell with <span className="text-accent">our community</span></>}
+        title={<>Buy and sell with our community</>}
         subtitle="Items listed by people across Lithuania. Create a free account to list your own with photos and video."
       >
         <Link

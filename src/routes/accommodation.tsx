@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Bed, Home, ArrowUpRight } from "lucide-react";
+import { Check, Bed, Home } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -34,7 +34,7 @@ function AccommodationPage() {
     <>
       <PageHero
         eyebrow="Accommodation"
-        title={<>Short & long-term stays you can <span className="text-accent">trust</span></>}
+        title={<>Short & long-term stays you can trust</>}
         subtitle="Whether you're arriving for a week or settling for a year, we connect you with safe, vetted homes in Lithuania."
       >
         <WhatsAppButton size="lg" label="Ask about accommodation" />
@@ -72,7 +72,6 @@ function AccommodationPage() {
             </ul>
             <Link to={b.href} className="mt-6 inline-flex items-center gap-1 text-sm font-bold underline-offset-4 hover:underline">
               View {b.title} details
-              <ArrowUpRight className="size-4" />
             </Link>
           </div>
         ))}

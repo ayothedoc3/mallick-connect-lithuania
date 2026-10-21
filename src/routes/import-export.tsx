@@ -34,7 +34,7 @@ function ImportExportPage() {
     <>
       <PageHero
         eyebrow="Import & Export"
-        title={<>Ship with <span className="text-accent">confidence</span> in & out of Lithuania</>}
+        title={<>Ship with confidence in & out of Lithuania</>}
         subtitle="From a single parcel to a full container, we help with logistics, paperwork and trusted shipping partners."
       >
         <WhatsAppButton size="lg" label="Ask about shipping" />

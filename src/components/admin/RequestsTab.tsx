@@ -46,7 +46,7 @@ export function RequestsTab() {
   return (
     <div>
       <p className="text-sm text-muted-foreground">
-        Everything sent through the "Request a Service" forms on the site.
+        Everything sent through the "Request a service" forms on the site.
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {STATUSES.map((s) => (

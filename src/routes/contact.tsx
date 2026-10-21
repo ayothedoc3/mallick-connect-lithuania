@@ -42,7 +42,7 @@ function ContactPage() {
     <>
       <PageHero
         eyebrow="Contact us"
-        title={<>One trusted contact for <span className="text-accent">everything you need</span></>}
+        title={<>One trusted contact for everything you need</>}
         subtitle="WhatsApp is fastest. Most messages answered within minutes during working hours."
       >
         <div className="flex flex-wrap gap-3">
@@ -70,7 +70,7 @@ function ContactPage() {
                   <c.icon className="size-5" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{c.label}</div>
+                  <div className="text-sm text-muted-foreground">{c.label}</div>
                   <div className="mt-0.5 font-display font-extrabold text-primary truncate">{c.value}</div>
                 </div>
               </div>

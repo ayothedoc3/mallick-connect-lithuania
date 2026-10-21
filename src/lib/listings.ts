@@ -70,7 +70,11 @@ export function sortedMedia(l: Listing) {
 
 export function formatPrice(p: number | null) {
   if (p === null || p === undefined) return "Price on request";
-  return new Intl.NumberFormat("en-LT", { style: "currency", currency: "EUR" }).format(p);
+  return new Intl.NumberFormat("en-LT", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: Number.isInteger(Number(p)) ? 0 : 2,
+  }).format(p);
 }
 
 export async function fetchPublishedListings(limit = 60): Promise<Listing[]> {

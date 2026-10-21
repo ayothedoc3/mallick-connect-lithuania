@@ -34,7 +34,7 @@ function BuyingSellingPage() {
     <>
       <PageHero
         eyebrow="Buying & Selling Items"
-        title={<>Buy what you need, sell what you <span className="text-accent">do not</span></>}
+        title={<>Buy what you need, sell what you do not</>}
         subtitle="Setting up a new home or moving on? We connect you with trusted buyers and sellers in the community, so nothing goes to waste."
       >
         <div className="flex flex-wrap gap-3">

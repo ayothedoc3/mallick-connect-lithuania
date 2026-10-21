@@ -101,21 +101,21 @@ function AuthPage() {
             {mode === "signup" && (
               <>
                 <label className="block">
-                  <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Full name</span>
+                  <span className="mb-1.5 block text-sm font-semibold text-primary">Full name</span>
                   <input required minLength={2} maxLength={80} value={form.name} onChange={set("name")} className={inputCls} autoComplete="name" />
                 </label>
                 <label className="block">
-                  <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">WhatsApp number</span>
+                  <span className="mb-1.5 block text-sm font-semibold text-primary">WhatsApp number</span>
                   <input required maxLength={30} value={form.whatsapp} onChange={set("whatsapp")} className={inputCls} placeholder="+370…" autoComplete="tel" inputMode="tel" />
                 </label>
               </>
             )}
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Email</span>
+              <span className="mb-1.5 block text-sm font-semibold text-primary">Email</span>
               <input required type="email" value={form.email} onChange={set("email")} className={inputCls} autoComplete="email" />
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">Password</span>
+              <span className="mb-1.5 block text-sm font-semibold text-primary">Password</span>
               <input
                 required
                 type="password"

@@ -55,10 +55,9 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-5 right-5 z-50 grid size-14 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-card hover:scale-105 transition-transform"
+      className="fixed bottom-4 right-4 z-50 grid size-12 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-card lg:hidden"
     >
-      <MessageCircle className="size-7" strokeWidth={2.5} />
-      <span className="absolute inset-0 rounded-full bg-whatsapp animate-ping opacity-30" />
+      <MessageCircle className="size-6" strokeWidth={2.5} />
     </a>
   );
 }

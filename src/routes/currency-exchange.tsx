@@ -34,7 +34,7 @@ function CurrencyExchangePage() {
     <>
       <PageHero
         eyebrow="Currency Exchange Assistance"
-        title={<>Exchange and send money the <span className="text-accent">safe way</span></>}
+        title={<>Exchange and send money the safe way</>}
         subtitle="New to Lithuania and unsure where to change or send money? We guide you to fair rates and trusted, transparent options."
       >
         <WhatsAppButton size="lg" label="Ask about exchange" />

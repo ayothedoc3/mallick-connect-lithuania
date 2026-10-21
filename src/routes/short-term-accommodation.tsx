@@ -34,7 +34,7 @@ function ShortTermPage() {
     <>
       <PageHero
         eyebrow="Short Term Accommodation"
-        title={<>A safe place to land, from your <span className="text-accent">first night</span></>}
+        title={<>A safe place to land, from your first night</>}
         subtitle="Just arriving for a few days or a few weeks? We set you up with a comfortable, vetted home so you can settle in without the stress."
       >
         <WhatsAppButton size="lg" label="Ask about a short stay" />

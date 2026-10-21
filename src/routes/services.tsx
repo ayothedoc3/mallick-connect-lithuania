@@ -19,14 +19,13 @@ export const Route = createFileRoute("/services")({
   component: ServicesPage,
 });
 
-const TONES = ["navy", "blue", "yellow", "blue", "light", "navy"] as const;
 
 function ServicesPage() {
   return (
     <>
       <PageHero
         eyebrow="Our Services"
-        title={<>Everything you need, <span className="text-accent">under one roof</span></>}
+        title={<>Everything you need, under one roof</>}
         subtitle="From your first night in Lithuania to shipping goods overseas, we provide trusted support across six core services."
       >
         <WhatsAppButton size="lg" />
@@ -34,8 +33,8 @@ function ServicesPage() {
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-16">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <ServiceCard key={s.slug} title={s.title} description={s.short} icon={s.icon} tone={TONES[i]} href={`/${s.slug}`} />
+          {SERVICES.map((s) => (
+            <ServiceCard key={s.slug} title={s.title} description={s.short} icon={s.icon} href={`/${s.slug}`} />
           ))}
         </div>
       </section>

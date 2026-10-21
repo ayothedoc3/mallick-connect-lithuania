@@ -23,7 +23,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="text-sm font-bold uppercase tracking-wider text-accent">Services</h4>
+          <h4 className="font-display text-base font-extrabold text-accent">Services</h4>
           <ul className="mt-4 space-y-2 text-sm text-primary-foreground/80">
             <li><Link to="/short-term-accommodation" className="hover:text-accent">Short Term Accommodation</Link></li>
             <li><Link to="/long-term-accommodation" className="hover:text-accent">Long Term Accommodation</Link></li>
@@ -37,7 +37,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="text-sm font-bold uppercase tracking-wider text-accent">Contact</h4>
+          <h4 className="font-display text-base font-extrabold text-accent">Contact</h4>
           <ul className="mt-4 space-y-3 text-sm text-primary-foreground/80">
             <li className="flex items-start gap-2">
               <Phone className="size-4 mt-0.5 shrink-0 text-accent" />

@@ -34,7 +34,7 @@ function LongTermPage() {
     <>
       <PageHero
         eyebrow="Long Term Accommodation"
-        title={<>Find a place to truly call <span className="text-accent">home</span></>}
+        title={<>Find a place to truly call home</>}
         subtitle="Settling in Lithuania for a year or more? We help you find the right rental and guide you through contracts, deposits and the details newcomers often miss."
       >
         <WhatsAppButton size="lg" label="Ask about long-term housing" />

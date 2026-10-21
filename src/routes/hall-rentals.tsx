@@ -34,7 +34,7 @@ function HallRentalsPage() {
     <>
       <PageHero
         eyebrow="Hall Rentals"
-        title={<>Event halls for every <span className="text-accent">celebration</span></>}
+        title={<>Event halls for every celebration</>}
         subtitle="From intimate gatherings to grand weddings, we help you find and book the right venue, and stay with you through the planning."
       >
         <WhatsAppButton size="lg" label="Ask about a hall" />
