@@ -4,7 +4,7 @@
 # (see infra/backup-service.yaml). Keeps the last KEEP_DAYS days in /backups.
 set -eu
 
-KEEP_DAYS="${KEEP_DAYS:-14}"
+: "$KEEP_DAYS"
 export PGHOST=supabase-db PGUSER=supabase_admin PGDATABASE=postgres
 
 backup() {

@@ -71,5 +71,47 @@ asked for cookie consent first and GA only loads if they accept.
 - Files are public by URL once uploaded, even while a listing is pending.
 - `src/routeTree.gen.ts` regenerates itself on the next build/dev run to include the new pages.
 
+## 6. Payments, bookings and featured listings
+Run `supabase/platform.sql` after `admin.sql`. It adds private settings (keys), alerts,
+provider profiles, reviews and bookings. The server needs `SUPABASE_SERVICE_ROLE_KEY` as a
+runtime environment variable (not a build variable) to read the private settings.
+
+Stripe (in **/precious → Integrations**):
+1. Paste the **secret key** (`sk_live_...`) from Stripe → Developers → API keys.
+2. In Stripe → Developers → Webhooks, add the endpoint `https://mallickassistservice.com/api/stripe/webhook`
+   with the events `checkout.session.completed` and `checkout.session.expired`.
+3. Paste the webhook's **signing secret** (`whsec_...`).
+
+Once both are saved, "Feature it" buttons and the deposit booking calendar appear. Staff add
+stays and halls from **/precious → Listings → Add a stay / Add a hall**, with a price, capacity
+and deposit. A booking holds its dates for 31 minutes while the customer pays; double bookings
+are blocked by the database. Refunds are made in the Stripe dashboard.
+
+## 7. Email and Telegram alerts
+- **Resend**: create an account, add the domain `mallickassistservice.com` and the DNS records it
+  shows in Cloudflare, then paste the API key and the "from" address (for example
+  `Mallick Assist Service <hello@mallickassistservice.com>`) in **Integrations**.
+  Password reset emails are sent through the site (`/api/hooks/auth-email`), so they only work
+  once Resend is set up.
+- **Telegram**: create a bot with @BotFather, send it a message, then paste the bot token and your
+  chat ID in **Integrations**. "Send a test alert" checks both channels.
+- Staff get alerts for new listings, service requests, reviews and paid bookings. Sellers get an
+  email when their listing is approved or rejected.
+
+## 8. Legal pages
+/privacy, /terms and /cookies read the company name, registration number (Įmonės kodas),
+address, contact email and booking terms from **/precious → Site settings**. Fill these in and
+have a lawyer review the wording.
+
+## 9. Backups and uptime
+- `infra/backup.sh` runs in the `db-backup` container of the Supabase service
+  (`infra/backup-service.yaml`). Every 24 hours it saves the database and uploaded files to
+  `volumes/backups/<date>/` on the server and keeps 14 days. Copy them off the server too
+  (for example to Cloudflare R2) so a server failure doesn't take the backups with it.
+  Restore: `pg_restore -h supabase-db -U supabase_admin -d postgres --clean postgres.dump`.
+- `.github/workflows/uptime.yml` checks the site every 10 minutes. GitHub emails the repo owner
+  when a run fails. GitHub pauses scheduled workflows after 60 days without commits; re-enable it
+  under Actions if that happens.
+
 ## Not included yet
-Password reset, editing an existing listing, and deleting user accounts from the admin panel.
+Deleting user accounts from the admin panel.
