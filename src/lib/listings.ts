@@ -73,15 +73,13 @@ export function formatPrice(p: number | null) {
   return new Intl.NumberFormat("en-LT", { style: "currency", currency: "EUR" }).format(p);
 }
 
-export async function fetchPublishedListings(category?: string): Promise<Listing[]> {
-  let q = supabase
+export async function fetchPublishedListings(limit = 60): Promise<Listing[]> {
+  const { data, error } = await supabase
     .from("listings")
     .select("*, listing_media(*)")
     .eq("status", "published")
     .order("created_at", { ascending: false })
-    .limit(60);
-  if (category) q = q.eq("category", category);
-  const { data, error } = await q;
+    .limit(limit);
   if (error) throw error;
   return (data ?? []) as Listing[];
 }

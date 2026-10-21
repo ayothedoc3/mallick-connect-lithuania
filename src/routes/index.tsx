@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Sparkles, Clock, HeartHandshake, MapPin, ArrowRight, Quote, MessageSquare, ClipboardList, Compass } from "lucide-react";
+import { Check, Sparkles, Clock, HeartHandshake, MapPin, ArrowRight, Quote, MessageSquare, ClipboardList, Compass, ShoppingBag, Tag } from "lucide-react";
 import { ServiceCard } from "@/components/ServiceCard";
+import { ListingCard } from "@/components/ListingCard";
+import { fetchPublishedListings } from "@/lib/listings";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { SERVICES } from "@/lib/site";
@@ -32,6 +34,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  loader: () => fetchPublishedListings(4),
   component: Home,
 });
 
@@ -39,6 +42,7 @@ const TONES = ["navy", "blue", "yellow", "blue", "light", "navy"] as const;
 
 function Home() {
   const site = useSiteSettings();
+  const latest = Route.useLoaderData();
   return (
     <>
       {/* HERO */}
@@ -64,6 +68,12 @@ function Home() {
                 className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-accent-foreground hover:brightness-105 shadow-soft"
               >
                 Request a Service <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                to="/marketplace"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 px-6 py-3.5 text-sm font-bold hover:bg-white/10"
+              >
+                <ShoppingBag className="size-4" /> Browse Marketplace
               </Link>
               <WhatsAppButton size="lg" />
             </div>
@@ -121,6 +131,51 @@ function Home() {
               href={`/${s.slug}`}
             />
           ))}
+        </div>
+      </section>
+
+      {/* MARKETPLACE */}
+      <section className="bg-primary py-20 text-primary-foreground">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-accent">Marketplace</span>
+              <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold">
+                Buy and sell with our community
+              </h2>
+              <p className="mt-3 max-w-xl text-primary-foreground/80">
+                Furniture, electronics, kitchen items and more from people across Lithuania.
+                Listing is free: add photos, a price and you're done.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                to="/marketplace"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-accent-foreground shadow-soft hover:brightness-105"
+              >
+                <ShoppingBag className="size-4" /> Browse all items
+              </Link>
+              <Link
+                to="/sell"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 px-6 py-3.5 text-sm font-bold hover:bg-white/10"
+              >
+                <Tag className="size-4" /> Sell an item
+              </Link>
+            </div>
+          </div>
+
+          {latest.length > 0 ? (
+            <div className="mt-10 grid gap-5 text-foreground sm:grid-cols-2 lg:grid-cols-4">
+              {latest.map((l) => (
+                <ListingCard key={l.id} listing={l} />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-10 rounded-3xl border border-white/15 bg-white/5 p-10 text-center">
+              <p className="font-display text-xl font-extrabold">No items listed yet</p>
+              <p className="mt-2 text-sm text-primary-foreground/75">Be the first to sell something.</p>
+            </div>
+          )}
         </div>
       </section>
 
