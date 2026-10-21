@@ -1,19 +1,25 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { MessageCircle, PlayCircle } from "lucide-react";
+import { BadgeCheck, MessageCircle, PlayCircle, Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { DETAIL_ROUTE } from "@/components/ListingCard";
 import {
   deleteListing,
   fetchAllListings,
+  isFeatured,
+  setFeaturedUntil,
   fetchProfiles,
   priceLabel,
   mediaUrl,
   setListingStatus,
   sortedMedia,
   type Listing,
+  type ListingKind,
   type ListingStatus,
 } from "@/lib/listings";
+import { fetchProviderBadges, setProviderVerified } from "@/lib/providers";
+import { useSiteSettings } from "@/lib/settings";
 import { cn } from "@/lib/utils";
 
 const FILTERS: { id: ListingStatus | "all"; label: string }[] = [
@@ -34,9 +40,21 @@ const STATUS_CLS: Record<ListingStatus, string> = {
 const btn =
   "rounded-full border border-input px-3 py-1.5 font-semibold hover:border-primary-bright disabled:opacity-60";
 
+const KIND_FILTERS: { id: ListingKind | "all"; label: string }[] = [
+  { id: "all", label: "All types" },
+  { id: "item", label: "Items" },
+  { id: "service", label: "Services" },
+  { id: "stay", label: "Stays" },
+  { id: "hall", label: "Halls" },
+];
+
+const DAY = 86_400_000;
+
 export function ListingsTab() {
   const [filter, setFilter] = useState<ListingStatus | "all">("pending");
+  const [kindFilter, setKindFilter] = useState<ListingKind | "all">("all");
   const queryClient = useQueryClient();
+  const site = useSiteSettings();
 
   const listings = useQuery({ queryKey: ["admin", "listings"], queryFn: fetchAllListings });
   const sellerIds = [...new Set((listings.data ?? []).map((l) => l.user_id))];
@@ -46,10 +64,38 @@ export function ListingsTab() {
     enabled: listings.isSuccess,
   });
 
+  const providerIds = [
+    ...new Set((listings.data ?? []).filter((l) => l.kind === "service").map((l) => l.user_id)),
+  ];
+  const badges = useQuery({
+    queryKey: ["admin", "provider-badges", providerIds],
+    queryFn: () => fetchProviderBadges(providerIds),
+    enabled: listings.isSuccess,
+  });
+
   const refresh = () => {
-    queryClient.invalidateQueries({ queryKey: ["admin", "listings"] });
+    queryClient.invalidateQueries({ queryKey: ["admin"] });
     queryClient.invalidateQueries({ queryKey: ["listings"] });
   };
+
+  const featured = useMutation({
+    mutationFn: ({ id, on }: { id: string; on: boolean }) =>
+      setFeaturedUntil(id, on ? new Date(Date.now() + site.feature_days * DAY) : null),
+    onSuccess: () => {
+      toast.success("Featured placement updated.");
+      refresh();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Could not update."),
+  });
+
+  const verify = useMutation({
+    mutationFn: ({ userId, on }: { userId: string; on: boolean }) => setProviderVerified(userId, on),
+    onSuccess: () => {
+      toast.success("Provider updated.");
+      refresh();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Could not update."),
+  });
 
   const status = useMutation({
     mutationFn: ({ id, to }: { id: string; to: ListingStatus }) => setListingStatus(id, to),
@@ -73,14 +119,38 @@ export function ListingsTab() {
   if (listings.error)
     return <p className="text-sm text-destructive">{(listings.error as Error).message}</p>;
 
-  const all = listings.data ?? [];
+  const all = (listings.data ?? []).filter((l) => kindFilter === "all" || l.kind === kindFilter);
   const count = (id: ListingStatus | "all") =>
     id === "all" ? all.length : all.filter((l) => l.status === id).length;
   const shown = filter === "all" ? all : all.filter((l) => l.status === filter);
-  const busy = status.isPending || remove.isPending;
+  const busy = status.isPending || remove.isPending || featured.isPending || verify.isPending;
 
   return (
     <div>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-1 rounded-full bg-secondary p-1">
+          {KIND_FILTERS.map((k) => (
+            <button
+              key={k.id}
+              onClick={() => setKindFilter(k.id)}
+              className={cn(
+                "rounded-full px-3 py-1.5 text-xs font-semibold",
+                kindFilter === k.id ? "bg-background text-primary shadow-soft" : "text-primary/70",
+              )}
+            >
+              {k.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <Link to="/sell" search={{ type: "stay" }} className="inline-flex items-center gap-1 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:bg-primary-bright">
+            <Plus className="size-3.5" /> Add a stay
+          </Link>
+          <Link to="/sell" search={{ type: "hall" }} className="inline-flex items-center gap-1 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:bg-primary-bright">
+            <Plus className="size-3.5" /> Add a hall
+          </Link>
+        </div>
+      </div>
       <div className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button
@@ -123,8 +193,18 @@ export function ListingsTab() {
                   {new Date(l.created_at).toLocaleString()}
                 </span>
                 <span className="rounded-full bg-primary px-2.5 py-1 font-semibold text-primary-foreground">
-                  {l.kind === "service" ? "Service" : "Item"}
+                  {{ item: "Item", service: "Service", stay: "Stay", hall: "Hall" }[l.kind]}
                 </span>
+                {isFeatured(l) && (
+                  <span className="rounded-full bg-accent px-2.5 py-1 font-semibold text-accent-foreground">
+                    Featured until {new Date(l.featured_until!).toLocaleDateString()}
+                  </span>
+                )}
+                {badges.data?.[l.user_id]?.verified && l.kind === "service" && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary-bright/15 px-2.5 py-1 font-semibold text-primary">
+                    <BadgeCheck className="size-3.5" /> Verified
+                  </span>
+                )}
                 <span className="text-muted-foreground">· {l.category}</span>
                 {l.condition && <span className="text-muted-foreground">· {l.condition}</span>}
                 {l.city && <span className="text-muted-foreground">· {l.city}</span>}
@@ -229,9 +309,34 @@ export function ListingsTab() {
                   </button>
                 )}
                 {(l.status === "published" || l.status === "sold") && (
-                  <Link to={l.kind === "service" ? "/services/$id" : "/marketplace/$id"} params={{ id: l.id }} className={btn}>
+                  <Link to={DETAIL_ROUTE[l.kind]} params={{ id: l.id }} className={btn}>
                     View on site
                   </Link>
+                )}
+                {(l.kind === "stay" || l.kind === "hall") && (
+                  <Link to="/sell" search={{ edit: l.id }} className={btn}>
+                    Edit
+                  </Link>
+                )}
+                {l.status === "published" && (l.kind === "item" || l.kind === "service") && (
+                  <button
+                    disabled={busy}
+                    onClick={() => featured.mutate({ id: l.id, on: !isFeatured(l) })}
+                    className={cn(btn, "inline-flex items-center gap-1")}
+                  >
+                    <Sparkles className="size-3.5" />
+                    {isFeatured(l) ? "Remove featured" : `Feature ${site.feature_days} days free`}
+                  </button>
+                )}
+                {l.kind === "service" && badges.data?.[l.user_id] && (
+                  <button
+                    disabled={busy}
+                    onClick={() => verify.mutate({ userId: l.user_id, on: !badges.data[l.user_id].verified })}
+                    className={cn(btn, "inline-flex items-center gap-1")}
+                  >
+                    <BadgeCheck className="size-3.5" />
+                    {badges.data[l.user_id].verified ? "Remove Verified badge" : "Verify provider"}
+                  </button>
                 )}
                 <button
                   disabled={busy}

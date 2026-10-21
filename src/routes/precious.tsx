@@ -9,14 +9,20 @@ import { ListingsTab } from "@/components/admin/ListingsTab";
 import { UsersTab } from "@/components/admin/UsersTab";
 import { RequestsTab } from "@/components/admin/RequestsTab";
 import { SettingsTab } from "@/components/admin/SettingsTab";
+import { IntegrationsTab } from "@/components/admin/IntegrationsTab";
+import { ReviewsTab } from "@/components/admin/ReviewsTab";
+import { BookingsTab } from "@/components/admin/BookingsTab";
 import { cn } from "@/lib/utils";
 
 // Managers handle listings and requests; admins also manage users, staff and site settings.
 const TABS = [
   { id: "listings", label: "Listings", roles: ["admin", "manager"] },
   { id: "requests", label: "Requests", roles: ["admin", "manager"] },
+  { id: "bookings", label: "Bookings", roles: ["admin", "manager"] },
+  { id: "reviews", label: "Reviews", roles: ["admin", "manager"] },
   { id: "users", label: "Users & staff", roles: ["admin"] },
   { id: "settings", label: "Site settings", roles: ["admin"] },
+  { id: "integrations", label: "Integrations", roles: ["admin"] },
 ] as const satisfies readonly { id: string; label: string; roles: readonly StaffRole[] }[];
 type Tab = (typeof TABS)[number]["id"];
 
@@ -107,8 +113,11 @@ function AdminPage() {
       <div className="mt-8">
         {active === "listings" && <ListingsTab />}
         {active === "requests" && <RequestsTab />}
+        {active === "bookings" && <BookingsTab />}
+        {active === "reviews" && <ReviewsTab />}
         {active === "users" && <UsersTab myId={user.id} />}
         {active === "settings" && <SettingsTab />}
+        {active === "integrations" && <IntegrationsTab />}
       </div>
     </section>
   );

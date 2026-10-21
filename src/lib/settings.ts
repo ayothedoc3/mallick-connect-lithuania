@@ -10,12 +10,21 @@ export interface SiteSettings {
   banner_enabled: boolean;
   banner_text: string;
   ga_measurement_id: string;
+  payments_enabled: boolean;
+  feature_price_eur: number;
+  feature_days: number;
+  legal_name: string;
+  company_code: string;
+  legal_address: string;
+  contact_email: string;
+  booking_terms: string;
 }
 
-export type SiteSettingsInput = SiteSettings;
+/** payments_enabled follows the Stripe keys in Integrations; it isn't edited directly. */
+export type SiteSettingsInput = Omit<SiteSettings, "payments_enabled">;
 
 const COLUMNS =
-  "phone, phone_display, city, tiktok_url, tiktok_handle, banner_enabled, banner_text, ga_measurement_id";
+  "phone, phone_display, city, tiktok_url, tiktok_handle, banner_enabled, banner_text, ga_measurement_id, payments_enabled, feature_price_eur, feature_days, legal_name, company_code, legal_address, contact_email, booking_terms";
 
 export async function fetchSiteSettings(): Promise<SiteSettings> {
   const { data, error } = await supabase.from("site_settings").select(COLUMNS).eq("id", 1).single();
@@ -23,10 +32,11 @@ export async function fetchSiteSettings(): Promise<SiteSettings> {
   return data as SiteSettings;
 }
 
-export async function updateSiteSettings(input: SiteSettingsInput) {
+export async function updateSiteSettings(input: SiteSettingsInput & { payments_enabled?: boolean }) {
+  const { payments_enabled: _ignored, ...fields } = input;
   const { error } = await supabase
     .from("site_settings")
-    .update({ ...input, updated_at: new Date().toISOString() })
+    .update({ ...fields, updated_at: new Date().toISOString() })
     .eq("id", 1);
   if (error) throw error;
 }

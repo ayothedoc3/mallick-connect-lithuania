@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
@@ -128,6 +128,11 @@ function AuthPage() {
                 autoComplete={mode === "signin" ? "current-password" : "new-password"}
               />
               {mode === "signup" && <span className="mt-1 block text-xs text-muted-foreground">At least 8 characters.</span>}
+              {mode === "signin" && (
+                <Link to="/forgot-password" className="mt-1.5 inline-block text-xs font-semibold text-primary-bright hover:underline">
+                  Forgot your password?
+                </Link>
+              )}
             </label>
             <button
               type="submit"

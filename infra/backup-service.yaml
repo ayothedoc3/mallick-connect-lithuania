@@ -1,0 +1,25 @@
+# Added to the mallick-supabase Coolify service compose, under "services:".
+# Dumps live in the service folder on the server: ./volumes/backups/<date>/
+#   globals.sql      roles (no passwords)
+#   postgres.dump    the whole database (restore with pg_restore)
+#   storage.tar.gz   uploaded photos and videos
+  db-backup:
+    image: supabase/postgres:15.8.1.085
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      - PGPASSWORD=${SERVICE_PASSWORD_POSTGRES}
+      - KEEP_DAYS=14
+    entrypoint:
+      - sh
+      - /backup.sh
+    volumes:
+      - type: bind
+        source: ./volumes/backup/backup.sh
+        target: /backup.sh
+        content: "<infra/backup.sh>"
+      - ./volumes/storage:/storage:ro
+      - ./volumes/backups:/backups
+    restart: unless-stopped
+    mem_limit: 256m

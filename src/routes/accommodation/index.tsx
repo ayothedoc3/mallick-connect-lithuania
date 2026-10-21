@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Bed, Home } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
+import { ListingBrowser } from "@/components/ListingBrowser";
+import { fetchPublishedListings } from "@/lib/listings";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 
-export const Route = createFileRoute("/accommodation")({
+export const Route = createFileRoute("/accommodation/")({
   head: () => ({
     meta: [
       { title: "Accommodation in Lithuania | Mallick Assist Service" },
@@ -26,10 +28,12 @@ export const Route = createFileRoute("/accommodation")({
       }),
     }],
   }),
+  loader: () => fetchPublishedListings("stay"),
   component: AccommodationPage,
 });
 
 function AccommodationPage() {
+  const catalogue = Route.useLoaderData();
   return (
     <>
       <PageHero
@@ -76,6 +80,18 @@ function AccommodationPage() {
           </div>
         ))}
       </section>
+
+      {catalogue.length > 0 && (
+        <section id="book" className="scroll-mt-20 bg-secondary/60 py-16 mb-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <h2 className="font-display text-3xl font-extrabold text-primary">Available stays</h2>
+            <p className="mt-2 max-w-xl text-muted-foreground">Rooms, studios and apartments you can book online with a deposit. Pick your dates on any stay to see the price.</p>
+            <div className="mt-8">
+              <ListingBrowser kind="stay" listings={catalogue} />
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-20">
         <ServiceRequestForm defaultService="Short Term Accommodation" title="Request accommodation" />

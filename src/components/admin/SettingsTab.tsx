@@ -36,6 +36,13 @@ export function SettingsTab() {
       tiktok_handle: form.tiktok_handle.trim(),
       banner_text: form.banner_text.trim(),
       ga_measurement_id: form.ga_measurement_id.trim().toUpperCase(),
+      feature_price_eur: Number(form.feature_price_eur),
+      feature_days: Number(form.feature_days),
+      legal_name: form.legal_name.trim(),
+      company_code: form.company_code.trim(),
+      legal_address: form.legal_address.trim(),
+      contact_email: form.contact_email.trim(),
+      booking_terms: form.booking_terms.trim(),
     });
   }
 
@@ -128,6 +135,61 @@ export function SettingsTab() {
             {form.banner_text}
           </div>
         )}
+      </fieldset>
+
+      <fieldset className="h-fit rounded-3xl border border-border bg-card p-6 shadow-soft">
+        <legend className="px-2 font-display text-lg font-extrabold text-primary">
+          Featured listings
+        </legend>
+        <p className="text-sm text-muted-foreground">
+          What sellers and providers pay to show their listing first, with a "Featured" badge.
+          Needs Stripe in Integrations.
+        </p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <Field label="Price (EUR)">
+            <input required type="number" min={1} step="0.5" value={form.feature_price_eur} onChange={set("feature_price_eur")} className={inputCls} />
+          </Field>
+          <Field label="For how many days">
+            <input required type="number" min={1} max={90} value={form.feature_days} onChange={set("feature_days")} className={inputCls} />
+          </Field>
+        </div>
+      </fieldset>
+
+      <fieldset className="h-fit rounded-3xl border border-border bg-card p-6 shadow-soft">
+        <legend className="px-2 font-display text-lg font-extrabold text-primary">
+          Legal details
+        </legend>
+        <p className="text-sm text-muted-foreground">
+          Shown on the privacy policy, terms and cookie pages. Fill in exactly as registered.
+        </p>
+        <div className="mt-4 grid gap-4">
+          <Field label="Legal name" hint="Company or person running Mallick Assist Service.">
+            <input required value={form.legal_name} onChange={set("legal_name")} className={inputCls} />
+          </Field>
+          <Field label="Company or activity code" hint="Įmonės kodas or individual activity certificate number (company or activity registration number).">
+            <input value={form.company_code} onChange={set("company_code")} className={inputCls} />
+          </Field>
+          <Field label="Registered address">
+            <input value={form.legal_address} onChange={set("legal_address")} className={inputCls} />
+          </Field>
+          <Field label="Contact email for privacy questions">
+            <input type="email" value={form.contact_email} onChange={set("contact_email")} className={inputCls} />
+          </Field>
+        </div>
+      </fieldset>
+
+      <fieldset className="h-fit rounded-3xl border border-border bg-card p-6 shadow-soft">
+        <legend className="px-2 font-display text-lg font-extrabold text-primary">
+          Booking terms
+        </legend>
+        <p className="text-sm text-muted-foreground">
+          Shown next to the booking form and in the terms. Say when deposits are refunded.
+        </p>
+        <div className="mt-4">
+          <Field label="Deposit and cancellation terms">
+            <textarea required rows={5} maxLength={1500} value={form.booking_terms} onChange={set("booking_terms")} className={inputCls} />
+          </Field>
+        </div>
       </fieldset>
 
       <fieldset className="h-fit rounded-3xl border border-border bg-card p-6 shadow-soft">

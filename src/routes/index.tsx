@@ -3,7 +3,7 @@ import { Sparkles, Clock, HeartHandshake, MapPin, Quote, ShoppingBag, Tag } from
 import { ServiceCard } from "@/components/ServiceCard";
 import { ListingCard } from "@/components/ListingCard";
 import { FounderVideo } from "@/components/FounderVideo";
-import { fetchPublishedListings } from "@/lib/listings";
+import { fetchPublishedListings, isFeatured } from "@/lib/listings";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { SERVICES } from "@/lib/site";
@@ -35,7 +35,11 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  loader: () => fetchPublishedListings("item", 4),
+  // Featured items first, then the newest.
+  loader: async () =>
+    (await fetchPublishedListings("item", 12))
+      .sort((a, b) => Number(isFeatured(b)) - Number(isFeatured(a)))
+      .slice(0, 4),
   component: Home,
 });
 

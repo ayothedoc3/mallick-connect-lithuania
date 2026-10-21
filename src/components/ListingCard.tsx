@@ -1,15 +1,22 @@
 import { Link } from "@tanstack/react-router";
-import { MapPin, PlayCircle } from "lucide-react";
-import { mediaUrl, priceLabel, sortedMedia, type Listing } from "@/lib/listings";
+import { BadgeCheck, MapPin, PlayCircle, Sparkles } from "lucide-react";
+import { isFeatured, mediaUrl, priceLabel, sortedMedia, type Listing } from "@/lib/listings";
 
-export function ListingCard({ listing }: { listing: Listing }) {
+export const DETAIL_ROUTE = {
+  item: "/marketplace/$id",
+  service: "/services/$id",
+  stay: "/accommodation/$id",
+  hall: "/hall-rentals/$id",
+} as const;
+
+export function ListingCard({ listing, verified = false }: { listing: Listing; verified?: boolean }) {
   const media = sortedMedia(listing);
   const cover = media.find((m) => m.kind === "image");
   const hasVideo = media.some((m) => m.kind === "video");
 
   return (
     <Link
-      to={listing.kind === "service" ? "/services/$id" : "/marketplace/$id"}
+      to={DETAIL_ROUTE[listing.kind]}
       params={{ id: listing.id }}
       className="group block h-full overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-card"
     >
@@ -24,6 +31,11 @@ export function ListingCard({ listing }: { listing: Listing }) {
         ) : (
           <div className="grid size-full place-items-center text-sm text-muted-foreground">No photo</div>
         )}
+        {isFeatured(listing) && (
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground shadow-soft">
+            <Sparkles className="size-3.5" /> Featured
+          </span>
+        )}
         {hasVideo && (
           <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-xs font-semibold text-white">
             <PlayCircle className="size-3.5" /> Video
@@ -31,7 +43,14 @@ export function ListingCard({ listing }: { listing: Listing }) {
         )}
       </div>
       <div className="p-5">
-        <p className="text-xs font-semibold text-muted-foreground">{listing.category}</p>
+        <p className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+          {listing.category}
+          {verified && (
+            <span className="inline-flex items-center gap-0.5 text-primary-bright">
+              <BadgeCheck className="size-3.5" /> Verified
+            </span>
+          )}
+        </p>
         <h3 className="mt-1 line-clamp-2 font-display text-base font-extrabold leading-tight text-primary">
           {listing.title}
         </h3>

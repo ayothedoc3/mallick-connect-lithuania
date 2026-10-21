@@ -4,6 +4,13 @@ import { fetchPublishedListings } from "@/lib/listings";
 
 const BASE_URL = "https://mallickassistservice.com";
 
+const SECTION = {
+  item: "marketplace",
+  service: "services",
+  stay: "accommodation",
+  hall: "hall-rentals",
+} as const;
+
 interface SitemapEntry {
   path: string;
   lastmod?: string;
@@ -27,16 +34,28 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/import-export", changefreq: "monthly", priority: "0.9" },
           { path: "/marketplace", changefreq: "daily", priority: "0.8" },
           { path: "/contact", changefreq: "monthly", priority: "0.8" },
-          ...[
-            ...(await fetchPublishedListings("item")),
-            ...(await fetchPublishedListings("service")),
-          ].map((l) => ({
-            path: `/${l.kind === "service" ? "services" : "marketplace"}/${l.id}`,
-            lastmod: l.created_at.slice(0, 10),
-            changefreq: "weekly" as const,
-            priority: "0.6",
-          })),
+          { path: "/privacy", changefreq: "monthly", priority: "0.3" },
+          { path: "/terms", changefreq: "monthly", priority: "0.3" },
+          { path: "/cookies", changefreq: "monthly", priority: "0.3" },
         ];
+        const services = await fetchPublishedListings("service");
+        const listings = [
+          ...(await fetchPublishedListings("item")),
+          ...services,
+          ...(await fetchPublishedListings("stay")),
+          ...(await fetchPublishedListings("hall")),
+        ];
+        for (const l of listings) {
+          entries.push({
+            path: `/${SECTION[l.kind]}/${l.id}`,
+            lastmod: l.created_at.slice(0, 10),
+            changefreq: "weekly",
+            priority: "0.6",
+          });
+        }
+        for (const userId of new Set(services.map((l) => l.user_id))) {
+          entries.push({ path: `/pros/${userId}`, changefreq: "weekly", priority: "0.6" });
+        }
         const urls = entries.map((e) =>
           [
             `  <url>`,

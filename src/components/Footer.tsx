@@ -58,6 +58,9 @@ export function Footer() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 text-xs text-primary-foreground/60 flex flex-wrap justify-between gap-2">
           <span>© {new Date().getFullYear()} Mallick Assist Service. All rights reserved.</span>
           <span className="flex flex-wrap gap-4">
+            <Link to="/privacy" className="underline hover:text-accent">Privacy</Link>
+            <Link to="/terms" className="underline hover:text-accent">Terms</Link>
+            <Link to="/cookies" className="underline hover:text-accent">Cookies</Link>
             {site.ga_measurement_id && (
               <button onClick={resetCookieConsent} className="underline hover:text-accent">
                 Cookie settings

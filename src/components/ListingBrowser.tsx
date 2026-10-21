@@ -2,7 +2,15 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { ListingCard } from "@/components/ListingCard";
-import { CATEGORIES, SERVICE_CATEGORIES, type Listing, type ListingKind } from "@/lib/listings";
+import {
+  CATEGORIES,
+  HALL_CATEGORIES,
+  SERVICE_CATEGORIES,
+  STAY_CATEGORIES,
+  isFeatured,
+  type Listing,
+  type ListingKind,
+} from "@/lib/listings";
 
 const inputCls =
   "rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20";
@@ -24,22 +32,49 @@ const COPY = {
     emptyHint: "Braider, chef, photographer? Be the first to offer your service.",
     cta: "Offer your service",
   },
+  stay: {
+    categories: STAY_CATEGORIES,
+    search: "Search stays, e.g. studio, Naujamiestis",
+    noMatch: "No stays match your search",
+    empty: "No stays listed right now",
+    emptyHint: "Message us on WhatsApp and we'll find one for you.",
+    cta: null,
+  },
+  hall: {
+    categories: HALL_CATEGORIES,
+    search: "Search halls, e.g. wedding, 100 guests",
+    noMatch: "No halls match your search",
+    empty: "No halls listed right now",
+    emptyHint: "Message us on WhatsApp and we'll find one for your event.",
+    cta: null,
+  },
 } as const;
 
 /** Search, category filter and grid for approved listings of one kind. */
-export function ListingBrowser({ kind, listings }: { kind: ListingKind; listings: Listing[] }) {
+export function ListingBrowser({
+  kind,
+  listings,
+  verified = {},
+}: {
+  kind: ListingKind;
+  listings: Listing[];
+  /** Service providers with the "Verified by Mallick" badge, by user id. */
+  verified?: Record<string, boolean>;
+}) {
   const copy = COPY[kind];
   const [q, setQ] = useState("");
   const [category, setCategory] = useState("");
 
   const shown = useMemo(() => {
     const term = q.trim().toLowerCase();
-    return listings.filter(
-      (l) =>
-        (!category || l.category === category) &&
-        (!term ||
-          `${l.title} ${l.description} ${l.category} ${l.city ?? ""}`.toLowerCase().includes(term)),
-    );
+    return listings
+      .filter(
+        (l) =>
+          (!category || l.category === category) &&
+          (!term ||
+            `${l.title} ${l.description} ${l.category} ${l.city ?? ""}`.toLowerCase().includes(term)),
+      )
+      .sort((a, b) => Number(isFeatured(b)) - Number(isFeatured(a)));
   }, [listings, q, category]);
 
   return (
@@ -62,7 +97,7 @@ export function ListingBrowser({ kind, listings }: { kind: ListingKind; listings
           aria-label="Category"
         >
           <option value="">All categories</option>
-          {copy.categories.map((c) => (
+          {(copy.categories as readonly string[]).map((c) => (
             <option key={c} value={c}>
               {c}
             </option>
@@ -79,18 +114,20 @@ export function ListingBrowser({ kind, listings }: { kind: ListingKind; listings
             <p className="mt-2 text-sm text-muted-foreground">
               {listings.length ? "Try a different word or category." : copy.emptyHint}
             </p>
-            <Link
-              to="/sell"
-              search={{ type: kind }}
-              className="mt-5 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary-bright"
-            >
-              {copy.cta}
-            </Link>
+            {copy.cta && (
+              <Link
+                to="/sell"
+                search={{ type: kind as "item" | "service" }}
+                className="mt-5 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary-bright"
+              >
+                {copy.cta}
+              </Link>
+            )}
           </div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {shown.map((l) => (
-              <ListingCard key={l.id} listing={l} />
+              <ListingCard key={l.id} listing={l} verified={Boolean(verified[l.user_id])} />
             ))}
           </div>
         )}

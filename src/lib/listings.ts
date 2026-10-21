@@ -25,9 +25,13 @@ export const SERVICE_CATEGORIES = [
   "Other",
 ] as const;
 
+export const STAY_CATEGORIES = ["Room", "Studio", "Apartment", "House"] as const;
+export const HALL_CATEGORIES = ["Event hall", "Conference room", "Restaurant space", "Outdoor venue"] as const;
+
 export const CONDITIONS = ["New", "Like new", "Good", "Fair"] as const;
 
-export type ListingKind = "item" | "service";
+/** item and service: anyone can list. stay and hall: staff-managed and bookable. */
+export type ListingKind = "item" | "service" | "stay" | "hall";
 
 /** What a service's starting price is charged per. */
 export const PRICE_UNITS = {
@@ -35,6 +39,8 @@ export const PRICE_UNITS = {
   session: "per session",
   person: "per person",
   job: "per job",
+  night: "per night",
+  day: "per day",
 } as const;
 export type PriceUnit = keyof typeof PRICE_UNITS;
 
@@ -76,6 +82,9 @@ export interface Listing {
   description: string;
   price_eur: number | null;
   price_unit: PriceUnit | null;
+  capacity: number | null;
+  deposit_eur: number | null;
+  featured_until: string | null;
   category: string;
   condition: string | null;
   city: string | null;
@@ -102,9 +111,15 @@ export function formatPrice(p: number | null) {
   }).format(p);
 }
 
-/** "€500" for items; "From €40 per session" for services. */
+export const isFeatured = (l: Pick<Listing, "featured_until">) =>
+  l.featured_until !== null && Date.parse(l.featured_until) > Date.now();
+
+/** "€500" for items; "From €40 per session" for services; "€60 per night" for stays. */
 export function priceLabel(l: Pick<Listing, "kind" | "price_eur" | "price_unit">) {
   if (l.kind === "item" || l.price_eur === null) return formatPrice(l.price_eur);
+  if (l.kind === "stay" || l.kind === "hall") {
+    return `${formatPrice(l.price_eur)} ${PRICE_UNITS[l.kind === "stay" ? "night" : "day"]}`;
+  }
   return `From ${formatPrice(l.price_eur)}${l.price_unit ? ` ${PRICE_UNITS[l.price_unit]}` : ""}`;
 }
 
@@ -154,10 +169,7 @@ export async function deleteListing(listing: Listing) {
   if (error) throw error;
 }
 
-export interface NewListingInput {
-  kind: ListingKind;
-  userId: string;
-  sellerName: string;
+export interface ListingFields {
   title: string;
   description: string;
   priceEur: number | null;
@@ -165,9 +177,31 @@ export interface NewListingInput {
   category: string;
   condition: string;
   city: string;
+  capacity: number | null;
+  depositEur: number | null;
+}
+
+export interface NewListingInput extends ListingFields {
+  kind: ListingKind;
+  userId: string;
+  sellerName: string;
   images: File[];
   videos: File[];
+  /** Staff adding a stay or hall publish straight away; everything else waits for review. */
+  publish: boolean;
 }
+
+const columns = (f: ListingFields) => ({
+  title: f.title,
+  description: f.description,
+  price_eur: f.priceEur,
+  price_unit: f.priceUnit,
+  category: f.category,
+  condition: f.condition || null,
+  city: f.city || null,
+  capacity: f.capacity,
+  deposit_eur: f.depositEur,
+});
 
 export function validateFiles(files: File[], kind: "image" | "video"): string | null {
   const types = kind === "image" ? LIMITS.imageTypes : LIMITS.videoTypes;
@@ -183,65 +217,95 @@ export function validateFiles(files: File[], kind: "image" | "video"): string | 
   return null;
 }
 
-/**
- * Creates the listing row (status "pending"), uploads every file to storage,
- * then records the files. If anything fails everything is rolled back.
- */
-export async function createListing(
-  input: NewListingInput,
-  onProgress?: (done: number, total: number) => void,
-): Promise<string> {
+type Progress = (done: number, total: number) => void;
+
+/** Uploads files into the user's folder and records them. Removes uploads again if anything fails. */
+async function addMedia(
+  listingId: string,
+  userId: string,
+  files: { images: File[]; videos: File[] },
+  firstPosition: number,
+  onProgress?: Progress,
+) {
+  const all = [
+    ...files.images.map((file) => ({ file, kind: "image" as const })),
+    ...files.videos.map((file) => ({ file, kind: "video" as const })),
+  ];
+  const uploaded: string[] = [];
+  try {
+    const rows: { listing_id: string; user_id: string; kind: string; storage_path: string; position: number }[] = [];
+    onProgress?.(0, all.length);
+    for (const [i, item] of all.entries()) {
+      const ext = EXT[item.file.type] ?? "bin";
+      const path = `${userId}/${listingId}/${crypto.randomUUID()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, item.file, { contentType: item.file.type, cacheControl: "31536000" });
+      if (upErr) throw upErr;
+      uploaded.push(path);
+      rows.push({ listing_id: listingId, user_id: userId, kind: item.kind, storage_path: path, position: firstPosition + i });
+      onProgress?.(i + 1, all.length);
+    }
+    if (rows.length) {
+      const { error: mediaErr } = await supabase.from("listing_media").insert(rows);
+      if (mediaErr) throw mediaErr;
+    }
+  } catch (err) {
+    if (uploaded.length) await supabase.storage.from(BUCKET).remove(uploaded);
+    throw err;
+  }
+}
+
+/** Creates the listing (status "pending") with its files. If anything fails it is rolled back. */
+export async function createListing(input: NewListingInput, onProgress?: Progress): Promise<string> {
   const { data: created, error } = await supabase
     .from("listings")
     .insert({
       kind: input.kind,
       user_id: input.userId,
       seller_name: input.sellerName || null,
-      title: input.title,
-      description: input.description,
-      price_eur: input.priceEur,
-      price_unit: input.priceUnit,
-      category: input.category,
-      condition: input.condition || null,
-      city: input.city || null,
+      ...columns(input),
+      ...(input.publish ? { status: "published" } : {}),
     })
     .select("id")
     .single();
   if (error || !created) throw error ?? new Error("Could not create the listing.");
-
   const listingId = created.id as string;
-  const uploaded: string[] = [];
-  const all = [
-    ...input.images.map((file) => ({ file, kind: "image" as const })),
-    ...input.videos.map((file) => ({ file, kind: "video" as const })),
-  ];
-
   try {
-    const rows: { listing_id: string; user_id: string; kind: string; storage_path: string; position: number }[] = [];
-    let done = 0;
-    onProgress?.(0, all.length);
-    for (const [i, item] of all.entries()) {
-      const ext = EXT[item.file.type] ?? "bin";
-      const path = `${input.userId}/${listingId}/${crypto.randomUUID()}.${ext}`;
-      const { error: upErr } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, item.file, { contentType: item.file.type, cacheControl: "31536000" });
-      if (upErr) throw upErr;
-      uploaded.push(path);
-      rows.push({ listing_id: listingId, user_id: input.userId, kind: item.kind, storage_path: path, position: i });
-      done += 1;
-      onProgress?.(done, all.length);
-    }
-    if (rows.length) {
-      const { error: mediaErr } = await supabase.from("listing_media").insert(rows);
-      if (mediaErr) throw mediaErr;
-    }
-    return listingId;
+    await addMedia(listingId, input.userId, input, 0, onProgress);
   } catch (err) {
-    if (uploaded.length) await supabase.storage.from(BUCKET).remove(uploaded);
     await supabase.from("listings").delete().eq("id", listingId);
     throw err;
   }
+  return listingId;
+}
+
+export interface ListingEdit extends ListingFields {
+  /** Existing photos and videos the person removed. */
+  removed: ListingMedia[];
+  images: File[];
+  videos: File[];
+  /** Staff edits keep the current status; anyone else's edit goes back for review. */
+  keepStatus: boolean;
+}
+
+export async function updateListing(listing: Listing, edit: ListingEdit, onProgress?: Progress) {
+  const { error } = await supabase
+    .from("listings")
+    .update({ ...columns(edit), ...(edit.keepStatus ? {} : { status: "pending" }) })
+    .eq("id", listing.id);
+  if (error) throw error;
+  if (edit.removed.length) {
+    const { error: delErr } = await supabase
+      .from("listing_media")
+      .delete()
+      .in("id", edit.removed.map((m) => m.id));
+    if (delErr) throw delErr;
+    const { error: rmErr } = await supabase.storage.from(BUCKET).remove(edit.removed.map((m) => m.storage_path));
+    if (rmErr) throw rmErr;
+  }
+  const next = Math.max(-1, ...(listing.listing_media ?? []).map((m) => m.position)) + 1;
+  await addMedia(listing.id, listing.user_id, edit, next, onProgress);
 }
 
 // ───────────── Staff helpers (RLS only lets staff use these) ─────────────
@@ -270,6 +334,15 @@ export async function setListingStatus(id: string, status: ListingStatus) {
 export type StaffRole = "admin" | "manager";
 
 /** The signed-in user's staff role, or null for regular users. */
+/** Staff: feature a listing until a date, or pass null to remove it. */
+export async function setFeaturedUntil(id: string, until: Date | null) {
+  const { error } = await supabase
+    .from("listings")
+    .update({ featured_until: until?.toISOString() ?? null })
+    .eq("id", id);
+  if (error) throw error;
+}
+
 export async function fetchStaffRole(): Promise<StaffRole | null> {
   const { data, error } = await supabase.rpc("staff_role");
   if (error) throw error;

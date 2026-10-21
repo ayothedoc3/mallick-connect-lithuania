@@ -1,0 +1,16 @@
+name: Uptime check
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Website responds
+        run: curl -fsS -o /dev/null -m 30 --retry 2 --retry-delay 20 https://mallickassistservice.com/
+      - name: Listings API responds
+        run: curl -fsS -o /dev/null -m 30 --retry 2 --retry-delay 20 https://mallickassistservice.com/sitemap.xml

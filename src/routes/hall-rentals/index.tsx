@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, PartyPopper, Users, Sparkles, Cake } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
+import { ListingBrowser } from "@/components/ListingBrowser";
+import { fetchPublishedListings } from "@/lib/listings";
 import { ServiceRequestForm } from "@/components/ServiceRequestForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 
-export const Route = createFileRoute("/hall-rentals")({
+export const Route = createFileRoute("/hall-rentals/")({
   head: () => ({
     meta: [
       { title: "Hall Rentals in Lithuania | Mallick Assist Service" },
@@ -26,10 +28,12 @@ export const Route = createFileRoute("/hall-rentals")({
       }),
     }],
   }),
+  loader: () => fetchPublishedListings("hall"),
   component: HallRentalsPage,
 });
 
 function HallRentalsPage() {
+  const catalogue = Route.useLoaderData();
   return (
     <>
       <PageHero
@@ -76,6 +80,18 @@ function HallRentalsPage() {
           </ul>
         </div>
       </section>
+
+      {catalogue.length > 0 && (
+        <section id="book" className="scroll-mt-20 bg-secondary/60 py-16 mb-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <h2 className="font-display text-3xl font-extrabold text-primary">Available halls</h2>
+            <p className="mt-2 max-w-xl text-muted-foreground">Venues you can book online with a deposit. Pick your date on any hall to see the price.</p>
+            <div className="mt-8">
+              <ListingBrowser kind="hall" listings={catalogue} />
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-20">
         <ServiceRequestForm defaultService="Hall Rentals" title="Request a hall booking" />

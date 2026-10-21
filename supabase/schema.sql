@@ -56,10 +56,21 @@ create index if not exists listings_status_created_idx on public.listings (statu
 create index if not exists listings_user_idx on public.listings (user_id);
 -- A listing is either an item for sale or a service a local provider offers.
 -- For services, price_eur is the starting price and price_unit what it is charged per.
-alter table public.listings add column if not exists kind text not null default 'item'
-  check (kind in ('item', 'service'));
-alter table public.listings add column if not exists price_unit text
-  check (price_unit is null or price_unit in ('hour', 'session', 'person', 'job'));
+-- kind: item (marketplace), service (local pros), stay or hall (staff-managed, bookable).
+alter table public.listings add column if not exists kind text not null default 'item';
+alter table public.listings drop constraint if exists listings_kind_check;
+alter table public.listings add constraint listings_kind_check
+  check (kind in ('item', 'service', 'stay', 'hall'));
+alter table public.listings add column if not exists price_unit text;
+alter table public.listings drop constraint if exists listings_price_unit_check;
+alter table public.listings add constraint listings_price_unit_check
+  check (price_unit is null or price_unit in ('hour', 'session', 'person', 'job', 'night', 'day'));
+-- Stays and halls: how many guests, and the deposit paid online to book.
+alter table public.listings add column if not exists capacity int check (capacity is null or capacity > 0);
+alter table public.listings add column if not exists deposit_eur numeric(10,2)
+  check (deposit_eur is null or deposit_eur >= 0);
+-- Paid or staff-granted "Featured" placement until this time.
+alter table public.listings add column if not exists featured_until timestamptz;
 create index if not exists listings_kind_status_created_idx on public.listings (kind, status, created_at desc);
 alter table public.listings enable row level security;
 
@@ -73,7 +84,10 @@ create policy "listings read" on public.listings
 drop policy if exists "listings insert own" on public.listings;
 create policy "listings insert own" on public.listings
   for insert to authenticated
-  with check (auth.uid() = user_id and status = 'pending');
+  with check (
+    auth.uid() = user_id and status = 'pending'
+    and kind in ('item', 'service') and featured_until is null
+  );
 
 drop policy if exists "listings update own" on public.listings;
 create policy "listings update own" on public.listings

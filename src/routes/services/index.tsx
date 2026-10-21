@@ -6,6 +6,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ListingBrowser } from "@/components/ListingBrowser";
 import { SetupNotice } from "@/components/SetupNotice";
 import { fetchPublishedListings } from "@/lib/listings";
+import { fetchProviderBadges } from "@/lib/providers";
 
 export const Route = createFileRoute("/services/")({
   head: () => ({
@@ -25,12 +26,19 @@ export const Route = createFileRoute("/services/")({
     ],
     links: [{ rel: "canonical", href: "https://mallickassistservice.com/services" }],
   }),
-  loader: () => fetchPublishedListings("service"),
+  loader: async () => {
+    const pros = await fetchPublishedListings("service");
+    const badges = await fetchProviderBadges([...new Set(pros.map((l) => l.user_id))]);
+    return {
+      pros,
+      verified: Object.fromEntries(Object.entries(badges).map(([id, b]) => [id, b.verified])),
+    };
+  },
   component: ServicesPage,
 });
 
 function ServicesPage() {
-  const pros = Route.useLoaderData();
+  const { pros, verified } = Route.useLoaderData();
   return (
     <>
       <PageHero
@@ -52,7 +60,7 @@ function ServicesPage() {
 
       <section id="local-pros" className="mx-auto max-w-7xl scroll-mt-20 px-4 sm:px-6 py-12">
         <SetupNotice />
-        <ListingBrowser kind="service" listings={pros} />
+        <ListingBrowser kind="service" listings={pros} verified={verified} />
       </section>
 
       <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-20 pt-8">

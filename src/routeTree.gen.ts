@@ -9,25 +9,45 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShortTermAccommodationRouteImport } from './routes/short-term-accommodation'
 import { Route as SellRouteImport } from './routes/sell'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PreciousRouteImport } from './routes/precious'
 import { Route as MyListingsRouteImport } from './routes/my-listings'
 import { Route as LongTermAccommodationRouteImport } from './routes/long-term-accommodation'
 import { Route as ImportExportRouteImport } from './routes/import-export'
-import { Route as HallRentalsRouteImport } from './routes/hall-rentals'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as CurrencyExchangeRouteImport } from './routes/currency-exchange'
+import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BuyingSellingRouteImport } from './routes/buying-selling'
+import { Route as BookingConfirmedRouteImport } from './routes/booking-confirmed'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AccommodationRouteImport } from './routes/accommodation'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as MarketplaceIndexRouteImport } from './routes/marketplace/index'
+import { Route as HallRentalsIndexRouteImport } from './routes/hall-rentals/index'
+import { Route as AccommodationIndexRouteImport } from './routes/accommodation/index'
 import { Route as ServicesIdRouteImport } from './routes/services/$id'
+import { Route as ProsIdRouteImport } from './routes/pros/$id'
 import { Route as MarketplaceIdRouteImport } from './routes/marketplace/$id'
+import { Route as HallRentalsIdRouteImport } from './routes/hall-rentals/$id'
+import { Route as AccommodationIdRouteImport } from './routes/accommodation/$id'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe.webhook'
+import { Route as ApiHooksNotifyRouteImport } from './routes/api/hooks.notify'
+import { Route as ApiHooksAuthEmailRouteImport } from './routes/api/hooks.auth-email'
+import { Route as ApiCheckoutFeatureRouteImport } from './routes/api/checkout.feature'
+import { Route as ApiCheckoutBookingRouteImport } from './routes/api/checkout.booking'
+import { Route as ApiAdminTestNotifyRouteImport } from './routes/api/admin.test-notify'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -41,6 +61,16 @@ const ShortTermAccommodationRoute = ShortTermAccommodationRouteImport.update({
 const SellRoute = SellRouteImport.update({
   id: '/sell',
   path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PreciousRoute = PreciousRouteImport.update({
@@ -63,14 +93,19 @@ const ImportExportRoute = ImportExportRouteImport.update({
   path: '/import-export',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HallRentalsRoute = HallRentalsRouteImport.update({
-  id: '/hall-rentals',
-  path: '/hall-rentals',
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CurrencyExchangeRoute = CurrencyExchangeRouteImport.update({
   id: '/currency-exchange',
   path: '/currency-exchange',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -83,14 +118,14 @@ const BuyingSellingRoute = BuyingSellingRouteImport.update({
   path: '/buying-selling',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookingConfirmedRoute = BookingConfirmedRouteImport.update({
+  id: '/booking-confirmed',
+  path: '/booking-confirmed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccommodationRoute = AccommodationRouteImport.update({
-  id: '/accommodation',
-  path: '/accommodation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -108,9 +143,24 @@ const MarketplaceIndexRoute = MarketplaceIndexRouteImport.update({
   path: '/marketplace/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HallRentalsIndexRoute = HallRentalsIndexRouteImport.update({
+  id: '/hall-rentals/',
+  path: '/hall-rentals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccommodationIndexRoute = AccommodationIndexRouteImport.update({
+  id: '/accommodation/',
+  path: '/accommodation/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesIdRoute = ServicesIdRouteImport.update({
   id: '/services/$id',
   path: '/services/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProsIdRoute = ProsIdRouteImport.update({
+  id: '/pros/$id',
+  path: '/pros/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketplaceIdRoute = MarketplaceIdRouteImport.update({
@@ -118,154 +168,306 @@ const MarketplaceIdRoute = MarketplaceIdRouteImport.update({
   path: '/marketplace/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HallRentalsIdRoute = HallRentalsIdRouteImport.update({
+  id: '/hall-rentals/$id',
+  path: '/hall-rentals/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccommodationIdRoute = AccommodationIdRouteImport.update({
+  id: '/accommodation/$id',
+  path: '/accommodation/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
+  id: '/api/stripe/webhook',
+  path: '/api/stripe/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHooksNotifyRoute = ApiHooksNotifyRouteImport.update({
+  id: '/api/hooks/notify',
+  path: '/api/hooks/notify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHooksAuthEmailRoute = ApiHooksAuthEmailRouteImport.update({
+  id: '/api/hooks/auth-email',
+  path: '/api/hooks/auth-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutFeatureRoute = ApiCheckoutFeatureRouteImport.update({
+  id: '/api/checkout/feature',
+  path: '/api/checkout/feature',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutBookingRoute = ApiCheckoutBookingRouteImport.update({
+  id: '/api/checkout/booking',
+  path: '/api/checkout/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminTestNotifyRoute = ApiAdminTestNotifyRouteImport.update({
+  id: '/api/admin/test-notify',
+  path: '/api/admin/test-notify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/accommodation': typeof AccommodationRoute
   '/auth': typeof AuthRoute
+  '/booking-confirmed': typeof BookingConfirmedRoute
   '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
   '/currency-exchange': typeof CurrencyExchangeRoute
-  '/hall-rentals': typeof HallRentalsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/my-listings': typeof MyListingsRoute
   '/precious': typeof PreciousRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sell': typeof SellRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/accommodation/$id': typeof AccommodationIdRoute
+  '/hall-rentals/$id': typeof HallRentalsIdRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
+  '/pros/$id': typeof ProsIdRoute
   '/services/$id': typeof ServicesIdRoute
+  '/accommodation/': typeof AccommodationIndexRoute
+  '/hall-rentals/': typeof HallRentalsIndexRoute
   '/marketplace/': typeof MarketplaceIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/admin/test-notify': typeof ApiAdminTestNotifyRoute
+  '/api/checkout/booking': typeof ApiCheckoutBookingRoute
+  '/api/checkout/feature': typeof ApiCheckoutFeatureRoute
+  '/api/hooks/auth-email': typeof ApiHooksAuthEmailRoute
+  '/api/hooks/notify': typeof ApiHooksNotifyRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/accommodation': typeof AccommodationRoute
   '/auth': typeof AuthRoute
+  '/booking-confirmed': typeof BookingConfirmedRoute
   '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
   '/currency-exchange': typeof CurrencyExchangeRoute
-  '/hall-rentals': typeof HallRentalsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/my-listings': typeof MyListingsRoute
   '/precious': typeof PreciousRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sell': typeof SellRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/accommodation/$id': typeof AccommodationIdRoute
+  '/hall-rentals/$id': typeof HallRentalsIdRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
+  '/pros/$id': typeof ProsIdRoute
   '/services/$id': typeof ServicesIdRoute
+  '/accommodation': typeof AccommodationIndexRoute
+  '/hall-rentals': typeof HallRentalsIndexRoute
   '/marketplace': typeof MarketplaceIndexRoute
   '/services': typeof ServicesIndexRoute
+  '/api/admin/test-notify': typeof ApiAdminTestNotifyRoute
+  '/api/checkout/booking': typeof ApiCheckoutBookingRoute
+  '/api/checkout/feature': typeof ApiCheckoutFeatureRoute
+  '/api/hooks/auth-email': typeof ApiHooksAuthEmailRoute
+  '/api/hooks/notify': typeof ApiHooksNotifyRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/accommodation': typeof AccommodationRoute
   '/auth': typeof AuthRoute
+  '/booking-confirmed': typeof BookingConfirmedRoute
   '/buying-selling': typeof BuyingSellingRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
   '/currency-exchange': typeof CurrencyExchangeRoute
-  '/hall-rentals': typeof HallRentalsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/import-export': typeof ImportExportRoute
   '/long-term-accommodation': typeof LongTermAccommodationRoute
   '/my-listings': typeof MyListingsRoute
   '/precious': typeof PreciousRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sell': typeof SellRoute
   '/short-term-accommodation': typeof ShortTermAccommodationRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/accommodation/$id': typeof AccommodationIdRoute
+  '/hall-rentals/$id': typeof HallRentalsIdRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
+  '/pros/$id': typeof ProsIdRoute
   '/services/$id': typeof ServicesIdRoute
+  '/accommodation/': typeof AccommodationIndexRoute
+  '/hall-rentals/': typeof HallRentalsIndexRoute
   '/marketplace/': typeof MarketplaceIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/admin/test-notify': typeof ApiAdminTestNotifyRoute
+  '/api/checkout/booking': typeof ApiCheckoutBookingRoute
+  '/api/checkout/feature': typeof ApiCheckoutFeatureRoute
+  '/api/hooks/auth-email': typeof ApiHooksAuthEmailRoute
+  '/api/hooks/notify': typeof ApiHooksNotifyRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/accommodation'
     | '/auth'
+    | '/booking-confirmed'
     | '/buying-selling'
     | '/contact'
+    | '/cookies'
     | '/currency-exchange'
-    | '/hall-rentals'
+    | '/forgot-password'
     | '/import-export'
     | '/long-term-accommodation'
     | '/my-listings'
     | '/precious'
+    | '/privacy'
+    | '/reset-password'
     | '/sell'
     | '/short-term-accommodation'
     | '/sitemap.xml'
+    | '/terms'
+    | '/accommodation/$id'
+    | '/hall-rentals/$id'
     | '/marketplace/$id'
+    | '/pros/$id'
     | '/services/$id'
+    | '/accommodation/'
+    | '/hall-rentals/'
     | '/marketplace/'
     | '/services/'
+    | '/api/admin/test-notify'
+    | '/api/checkout/booking'
+    | '/api/checkout/feature'
+    | '/api/hooks/auth-email'
+    | '/api/hooks/notify'
+    | '/api/stripe/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/accommodation'
     | '/auth'
+    | '/booking-confirmed'
     | '/buying-selling'
     | '/contact'
+    | '/cookies'
     | '/currency-exchange'
-    | '/hall-rentals'
+    | '/forgot-password'
     | '/import-export'
     | '/long-term-accommodation'
     | '/my-listings'
     | '/precious'
+    | '/privacy'
+    | '/reset-password'
     | '/sell'
     | '/short-term-accommodation'
     | '/sitemap.xml'
+    | '/terms'
+    | '/accommodation/$id'
+    | '/hall-rentals/$id'
     | '/marketplace/$id'
+    | '/pros/$id'
     | '/services/$id'
+    | '/accommodation'
+    | '/hall-rentals'
     | '/marketplace'
     | '/services'
+    | '/api/admin/test-notify'
+    | '/api/checkout/booking'
+    | '/api/checkout/feature'
+    | '/api/hooks/auth-email'
+    | '/api/hooks/notify'
+    | '/api/stripe/webhook'
   id:
     | '__root__'
     | '/'
-    | '/accommodation'
     | '/auth'
+    | '/booking-confirmed'
     | '/buying-selling'
     | '/contact'
+    | '/cookies'
     | '/currency-exchange'
-    | '/hall-rentals'
+    | '/forgot-password'
     | '/import-export'
     | '/long-term-accommodation'
     | '/my-listings'
     | '/precious'
+    | '/privacy'
+    | '/reset-password'
     | '/sell'
     | '/short-term-accommodation'
     | '/sitemap.xml'
+    | '/terms'
+    | '/accommodation/$id'
+    | '/hall-rentals/$id'
     | '/marketplace/$id'
+    | '/pros/$id'
     | '/services/$id'
+    | '/accommodation/'
+    | '/hall-rentals/'
     | '/marketplace/'
     | '/services/'
+    | '/api/admin/test-notify'
+    | '/api/checkout/booking'
+    | '/api/checkout/feature'
+    | '/api/hooks/auth-email'
+    | '/api/hooks/notify'
+    | '/api/stripe/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AccommodationRoute: typeof AccommodationRoute
   AuthRoute: typeof AuthRoute
+  BookingConfirmedRoute: typeof BookingConfirmedRoute
   BuyingSellingRoute: typeof BuyingSellingRoute
   ContactRoute: typeof ContactRoute
+  CookiesRoute: typeof CookiesRoute
   CurrencyExchangeRoute: typeof CurrencyExchangeRoute
-  HallRentalsRoute: typeof HallRentalsRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   ImportExportRoute: typeof ImportExportRoute
   LongTermAccommodationRoute: typeof LongTermAccommodationRoute
   MyListingsRoute: typeof MyListingsRoute
   PreciousRoute: typeof PreciousRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SellRoute: typeof SellRoute
   ShortTermAccommodationRoute: typeof ShortTermAccommodationRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
+  AccommodationIdRoute: typeof AccommodationIdRoute
+  HallRentalsIdRoute: typeof HallRentalsIdRoute
   MarketplaceIdRoute: typeof MarketplaceIdRoute
+  ProsIdRoute: typeof ProsIdRoute
   ServicesIdRoute: typeof ServicesIdRoute
+  AccommodationIndexRoute: typeof AccommodationIndexRoute
+  HallRentalsIndexRoute: typeof HallRentalsIndexRoute
   MarketplaceIndexRoute: typeof MarketplaceIndexRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
+  ApiAdminTestNotifyRoute: typeof ApiAdminTestNotifyRoute
+  ApiCheckoutBookingRoute: typeof ApiCheckoutBookingRoute
+  ApiCheckoutFeatureRoute: typeof ApiCheckoutFeatureRoute
+  ApiHooksAuthEmailRoute: typeof ApiHooksAuthEmailRoute
+  ApiHooksNotifyRoute: typeof ApiHooksNotifyRoute
+  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -285,6 +487,20 @@ declare module '@tanstack/react-router' {
       path: '/sell'
       fullPath: '/sell'
       preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/precious': {
@@ -315,11 +531,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImportExportRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/hall-rentals': {
-      id: '/hall-rentals'
-      path: '/hall-rentals'
-      fullPath: '/hall-rentals'
-      preLoaderRoute: typeof HallRentalsRouteImport
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/currency-exchange': {
@@ -327,6 +543,13 @@ declare module '@tanstack/react-router' {
       path: '/currency-exchange'
       fullPath: '/currency-exchange'
       preLoaderRoute: typeof CurrencyExchangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -343,18 +566,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BuyingSellingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/booking-confirmed': {
+      id: '/booking-confirmed'
+      path: '/booking-confirmed'
+      fullPath: '/booking-confirmed'
+      preLoaderRoute: typeof BookingConfirmedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/accommodation': {
-      id: '/accommodation'
-      path: '/accommodation'
-      fullPath: '/accommodation'
-      preLoaderRoute: typeof AccommodationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -378,11 +601,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hall-rentals/': {
+      id: '/hall-rentals/'
+      path: '/hall-rentals'
+      fullPath: '/hall-rentals/'
+      preLoaderRoute: typeof HallRentalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accommodation/': {
+      id: '/accommodation/'
+      path: '/accommodation'
+      fullPath: '/accommodation/'
+      preLoaderRoute: typeof AccommodationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/$id': {
       id: '/services/$id'
       path: '/services/$id'
       fullPath: '/services/$id'
       preLoaderRoute: typeof ServicesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pros/$id': {
+      id: '/pros/$id'
+      path: '/pros/$id'
+      fullPath: '/pros/$id'
+      preLoaderRoute: typeof ProsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/marketplace/$id': {
@@ -392,28 +636,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hall-rentals/$id': {
+      id: '/hall-rentals/$id'
+      path: '/hall-rentals/$id'
+      fullPath: '/hall-rentals/$id'
+      preLoaderRoute: typeof HallRentalsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accommodation/$id': {
+      id: '/accommodation/$id'
+      path: '/accommodation/$id'
+      fullPath: '/accommodation/$id'
+      preLoaderRoute: typeof AccommodationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stripe/webhook': {
+      id: '/api/stripe/webhook'
+      path: '/api/stripe/webhook'
+      fullPath: '/api/stripe/webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/hooks/notify': {
+      id: '/api/hooks/notify'
+      path: '/api/hooks/notify'
+      fullPath: '/api/hooks/notify'
+      preLoaderRoute: typeof ApiHooksNotifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/hooks/auth-email': {
+      id: '/api/hooks/auth-email'
+      path: '/api/hooks/auth-email'
+      fullPath: '/api/hooks/auth-email'
+      preLoaderRoute: typeof ApiHooksAuthEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout/feature': {
+      id: '/api/checkout/feature'
+      path: '/api/checkout/feature'
+      fullPath: '/api/checkout/feature'
+      preLoaderRoute: typeof ApiCheckoutFeatureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout/booking': {
+      id: '/api/checkout/booking'
+      path: '/api/checkout/booking'
+      fullPath: '/api/checkout/booking'
+      preLoaderRoute: typeof ApiCheckoutBookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/test-notify': {
+      id: '/api/admin/test-notify'
+      path: '/api/admin/test-notify'
+      fullPath: '/api/admin/test-notify'
+      preLoaderRoute: typeof ApiAdminTestNotifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AccommodationRoute: AccommodationRoute,
   AuthRoute: AuthRoute,
+  BookingConfirmedRoute: BookingConfirmedRoute,
   BuyingSellingRoute: BuyingSellingRoute,
   ContactRoute: ContactRoute,
+  CookiesRoute: CookiesRoute,
   CurrencyExchangeRoute: CurrencyExchangeRoute,
-  HallRentalsRoute: HallRentalsRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   ImportExportRoute: ImportExportRoute,
   LongTermAccommodationRoute: LongTermAccommodationRoute,
   MyListingsRoute: MyListingsRoute,
   PreciousRoute: PreciousRoute,
+  PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SellRoute: SellRoute,
   ShortTermAccommodationRoute: ShortTermAccommodationRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
+  AccommodationIdRoute: AccommodationIdRoute,
+  HallRentalsIdRoute: HallRentalsIdRoute,
   MarketplaceIdRoute: MarketplaceIdRoute,
+  ProsIdRoute: ProsIdRoute,
   ServicesIdRoute: ServicesIdRoute,
+  AccommodationIndexRoute: AccommodationIndexRoute,
+  HallRentalsIndexRoute: HallRentalsIndexRoute,
   MarketplaceIndexRoute: MarketplaceIndexRoute,
   ServicesIndexRoute: ServicesIndexRoute,
+  ApiAdminTestNotifyRoute: ApiAdminTestNotifyRoute,
+  ApiCheckoutBookingRoute: ApiCheckoutBookingRoute,
+  ApiCheckoutFeatureRoute: ApiCheckoutFeatureRoute,
+  ApiHooksAuthEmailRoute: ApiHooksAuthEmailRoute,
+  ApiHooksNotifyRoute: ApiHooksNotifyRoute,
+  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

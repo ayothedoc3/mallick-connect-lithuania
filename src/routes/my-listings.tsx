@@ -1,12 +1,18 @@
 import { useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { DETAIL_ROUTE } from "@/components/ListingCard";
 import { SetupNotice } from "@/components/SetupNotice";
+import { ProviderProfileEditor } from "@/components/ProviderProfileEditor";
 import { useAuth } from "@/lib/auth";
+import { payToFeature } from "@/lib/payments";
+import { useSiteSettings } from "@/lib/settings";
 import {
   deleteListing,
+  formatPrice,
+  isFeatured,
   fetchMyListings,
   priceLabel,
   markListingSold,
@@ -17,6 +23,9 @@ import {
 } from "@/lib/listings";
 
 export const Route = createFileRoute("/my-listings")({
+  validateSearch: (s: Record<string, unknown>): { featured?: 1 } => ({
+    featured: s.featured === 1 || s.featured === "1" ? 1 : undefined,
+  }),
   head: () => ({
     meta: [{ title: "My listings | Mallick Assist Service" }, { name: "robots", content: "noindex" }],
   }),
@@ -34,6 +43,17 @@ function MyListingsPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const site = useSiteSettings();
+  const { featured } = Route.useSearch();
+
+  useEffect(() => {
+    if (featured) toast.success("Payment received. Your listing will show as Featured within a minute.");
+  }, [featured]);
+
+  const feature = useMutation({
+    mutationFn: (l: Listing) => payToFeature(l.id),
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Payment couldn't be started."),
+  });
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth", search: { redirect: "/my-listings" } });
@@ -85,6 +105,8 @@ function MyListingsPage() {
         </Link>
       </div>
 
+      <ProviderProfileEditor userId={user.id} />
+
       <div className="mt-8 grid gap-4">
         {isLoading ? (
           <p className="py-10 text-center text-sm text-muted-foreground">Loading…</p>
@@ -106,14 +128,35 @@ function MyListingsPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${status.cls}`}>{status.text}</span>
                     <span className="text-xs text-muted-foreground">{new Date(l.created_at).toLocaleDateString()}</span>
+                    {isFeatured(l) && (
+                      <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
+                        Featured until {new Date(l.featured_until!).toLocaleDateString()}
+                      </span>
+                    )}
                   </div>
                   <h2 className="mt-1.5 truncate text-sm font-semibold">{l.title}</h2>
                   <p className="text-sm text-primary">{priceLabel(l)}</p>
                   <div className="mt-auto flex flex-wrap gap-2 pt-3 text-xs font-semibold">
                     {(l.status === "published" || l.status === "sold") && (
-                      <Link to={l.kind === "service" ? "/services/$id" : "/marketplace/$id"} params={{ id: l.id }} className="rounded-full border border-input px-3 py-1.5 hover:border-primary-bright">
+                      <Link to={DETAIL_ROUTE[l.kind]} params={{ id: l.id }} className="rounded-full border border-input px-3 py-1.5 hover:border-primary-bright">
                         View
                       </Link>
+                    )}
+                    {(l.kind === "item" || l.kind === "service") && (
+                      <Link to="/sell" search={{ edit: l.id }} className="rounded-full border border-input px-3 py-1.5 hover:border-primary-bright">
+                        Edit
+                      </Link>
+                    )}
+                    {site.payments_enabled && l.status === "published" && (l.kind === "item" || l.kind === "service") && (
+                      <button
+                        type="button"
+                        disabled={feature.isPending}
+                        onClick={() => feature.mutate(l)}
+                        className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1.5 text-accent-foreground hover:brightness-105 disabled:opacity-60"
+                      >
+                        <Sparkles className="size-3.5" />
+                        {isFeatured(l) ? "Extend featured" : "Feature it"}: {formatPrice(site.feature_price_eur)} for {site.feature_days} days
+                      </button>
                     )}
                     {l.status === "published" && (
                       <button

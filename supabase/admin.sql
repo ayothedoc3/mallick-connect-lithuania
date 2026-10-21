@@ -99,11 +99,17 @@ begin
     if new.status is distinct from old.status and new.status not in ('pending', 'sold') then
       raise exception 'Only staff can publish or reject listings';
     end if;
+    if new.featured_until is distinct from old.featured_until then
+      raise exception 'Featured placement is set by payment or staff';
+    end if;
+    if new.kind not in ('item', 'service') then
+      raise exception 'Only staff manage stays and halls';
+    end if;
     if (new.kind, new.title, new.description, new.price_eur, new.price_unit, new.category,
-        new.condition, new.city, new.seller_name)
+        new.condition, new.city, new.seller_name, new.capacity, new.deposit_eur)
        is distinct from
        (old.kind, old.title, old.description, old.price_eur, old.price_unit, old.category,
-        old.condition, old.city, old.seller_name)
+        old.condition, old.city, old.seller_name, old.capacity, old.deposit_eur)
     then
       new.status := 'pending';
     end if;

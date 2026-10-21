@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, MapPin, MessageCircle } from "lucide-react";
+import { ArrowLeft, BadgeCheck, MapPin, MessageCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Stars } from "@/components/Stars";
+import { fetchProviderPage } from "@/lib/providers";
 import { SetupNotice } from "@/components/SetupNotice";
 import {
   fetchListing,
@@ -10,7 +13,8 @@ import {
   type Listing,
   type ListingKind,
 } from "@/lib/listings";
-import { useWaLink } from "@/lib/settings";
+import { useSiteSettings, useWaLink } from "@/lib/settings";
+import { BookingWidget } from "@/components/BookingWidget";
 import { cn } from "@/lib/utils";
 
 const SITE_URL = "https://mallickassistservice.com";
@@ -36,6 +40,26 @@ const COPY = {
     by: "Offered by",
     gone: "This service is no longer available.",
     titleSuffix: "Local services in Vilnius",
+  },
+  stay: {
+    base: "/accommodation",
+    back: "All stays",
+    backLong: "Back to accommodation",
+    noun: "stay",
+    party: "host",
+    by: "Hosted with",
+    gone: "This stay is no longer available.",
+    titleSuffix: "Accommodation in Vilnius",
+  },
+  hall: {
+    base: "/hall-rentals",
+    back: "All halls",
+    backLong: "Back to hall rentals",
+    noun: "hall",
+    party: "venue",
+    by: "Managed by",
+    gone: "This hall is no longer available.",
+    titleSuffix: "Event halls in Vilnius",
   },
 } as const;
 
@@ -145,6 +169,12 @@ export function ListingDetail({ listing }: { listing: Listing }) {
   const media = sortedMedia(listing);
   const current = media[Math.min(active, media.length - 1)];
   const gone = listing.status === "sold";
+  const site = useSiteSettings();
+  const canBook =
+    (listing.kind === "stay" || listing.kind === "hall") &&
+    site.payments_enabled &&
+    listing.price_eur !== null &&
+    Boolean(listing.deposit_eur);
   const message = `Hello Mallick Assist Service, I'm interested in the ${copy.noun} "${listing.title}" (${priceLabel(listing)}). ${listingUrl(listing)}`;
 
   return (
@@ -225,6 +255,7 @@ export function ListingDetail({ listing }: { listing: Listing }) {
           <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
             <span>{listing.category}</span>
             {listing.condition && <span>Condition: {listing.condition}</span>}
+            {listing.capacity && <span>Up to {listing.capacity} guests</span>}
             {listing.city && (
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" /> {listing.city}
@@ -250,18 +281,57 @@ export function ListingDetail({ listing }: { listing: Listing }) {
           <p className="mt-2 text-xs text-muted-foreground">
             Messages go to Mallick Assist Service, who connect you with the {copy.party}.
           </p>
+          {!gone && canBook && <BookingWidget listing={listing} />}
 
           <h2 className="mt-8 font-display text-lg font-extrabold text-primary">Description</h2>
           <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-foreground/90">
             {listing.description}
           </p>
-          {listing.seller_name && (
-            <p className="mt-6 text-xs text-muted-foreground">
-              {copy.by} {listing.seller_name.split(" ")[0]}
-            </p>
+          {listing.kind === "service" ? (
+            <ProviderCard userId={listing.user_id} />
+          ) : (
+            listing.seller_name &&
+            listing.kind === "item" && (
+              <p className="mt-6 text-xs text-muted-foreground">
+                {copy.by} {listing.seller_name.split(" ")[0]}
+              </p>
+            )
           )}
         </div>
       </div>
     </section>
+  );
+}
+
+function ProviderCard({ userId }: { userId: string }) {
+  const q = useQuery({ queryKey: ["provider", userId], queryFn: () => fetchProviderPage(userId) });
+  if (!q.data) return null;
+  const { profile, rating } = q.data;
+  return (
+    <Link
+      to="/pros/$id"
+      params={{ id: userId }}
+      className="mt-8 flex items-center gap-4 rounded-3xl border border-border bg-card p-4 transition-colors hover:border-primary"
+    >
+      <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary font-display text-lg font-extrabold text-accent">
+        {profile.display_name.charAt(0).toUpperCase()}
+      </span>
+      <span className="min-w-0">
+        <span className="flex items-center gap-1.5 font-display font-extrabold text-primary">
+          {profile.display_name}
+          {profile.verified && <BadgeCheck className="size-4 text-primary-bright" aria-label="Verified by Mallick" />}
+        </span>
+        <span className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+          {rating ? (
+            <>
+              <Stars value={Number(rating.average)} /> {Number(rating.average).toFixed(1)} ({rating.count})
+            </>
+          ) : (
+            "No reviews yet"
+          )}
+          <span className="font-semibold text-primary-bright">See profile and reviews</span>
+        </span>
+      </span>
+    </Link>
   );
 }
